@@ -1,7 +1,7 @@
 {
   "name": "meanie-angular-api",
-  "description": "",
-  "version": "0.0.1",
+  "description": "An Angular service for easy and fully configurable API interaction for Meanie projects",
+  "version": "0.1.0",
   "homepage": "https://github.com/meanie/",
   "author": {
     "name": "Adam Buczynski",
@@ -19,7 +19,12 @@
   },
   "keywords": [
     "meanie",
-    "meanie-module"
+    "meanie-module",
+    "angular",
+    "angularjs",
+    "api",
+    "rest",
+    "resource"
   ],
   "files": [
     "src",
