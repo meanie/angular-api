@@ -12,14 +12,14 @@ angular.module('Api.Model', [])
   /**
    * Constructor
    */
-  function $apiModel(data) {
+  function ApiModel(data) {
     this.fromJSON(data);
   }
 
   /**
    * Init
    */
-  $apiModel.prototype.init = function() {
+  ApiModel.prototype.init = function() {
     angular.forEach(this, function(value, key) {
       delete this[key];
     }, this);
@@ -28,7 +28,7 @@ angular.module('Api.Model', [])
   /**
    * From JSON converter
    */
-  $apiModel.prototype.fromJSON = function(data) {
+  ApiModel.prototype.fromJSON = function(data) {
 
     //Init
     this.init();
@@ -50,7 +50,7 @@ angular.module('Api.Model', [])
   /**
    * To JSON converter
    */
-  $apiModel.prototype.toJSON = function() {
+  ApiModel.prototype.toJSON = function() {
 
     //Copy our properties onto a simple object
     var data = angular.extend({}, this);
@@ -58,5 +58,5 @@ angular.module('Api.Model', [])
   };
 
   //Return
-  return $apiModel;
+  return ApiModel;
 });

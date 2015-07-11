@@ -16,7 +16,7 @@ angular.module('Api.Endpoint.Service', [
   /**
    * Constructor
    */
-  return function $apiEndpoint(name, config) {
+  return function ApiEndpoint(name, config) {
 
     //Determine full URL of endpoint
     config.url = $url.concat(config.baseUrl, config.url || $url.concat(name, ':id'));

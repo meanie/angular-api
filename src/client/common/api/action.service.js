@@ -34,7 +34,7 @@ angular.module('Api.Action.Service', [
   /**
    * Constructor
    */
-  function $apiAction(action, endpoint) {
+  function ApiAction(action, endpoint) {
 
     //Set vars
     angular.extend(this, action);
@@ -51,21 +51,21 @@ angular.module('Api.Action.Service', [
   /**
    * Has body check
    */
-  $apiAction.prototype.hasBody = function() {
-    return /^(POST|PUT|PATCH)$/i.test(this.method)
+  ApiAction.prototype.hasBody = function() {
+    return /^(POST|PUT|PATCH)$/i.test(this.method);
   };
 
   /**
    * Expects array check
    */
-  $apiAction.prototype.expectsArray = function() {
+  ApiAction.prototype.expectsArray = function() {
     return !!this.isArray;
   };
 
   /**
    * Convert raw response data to a model
    */
-  $apiAction.prototype.convertToModel = function(data) {
+  ApiAction.prototype.convertToModel = function(data) {
 
     //Array given?
     if (angular.isArray(data)) {
@@ -82,7 +82,7 @@ angular.module('Api.Action.Service', [
   /**
    * Default success response interceptor
    */
-  $apiAction.prototype.successInterceptor = function(response) {
+  ApiAction.prototype.successInterceptor = function(response) {
 
     //Check if we expect an array
     var expectsArray = this.expectsArray();
@@ -102,10 +102,10 @@ angular.module('Api.Action.Service', [
   /**
    * Default error response interceptor
    */
-  $apiAction.prototype.errorInterceptor = function(response) {
+  ApiAction.prototype.errorInterceptor = function(response) {
     return $q.reject(response);
   };
 
   //Return
-  return $apiAction;
+  return ApiAction;
 });

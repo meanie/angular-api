@@ -120,7 +120,7 @@ angular.module('Api.Request.Service', [
   function parseUrl(url, params, urlParams, stripTrailingSlashes) {
 
     //Replace escaped \:
-    var url = url.replace(/\\:/g, ':');
+    url = url.replace(/\\:/g, ':');
 
     //Loop the valid URL params now
     angular.forEach(urlParams, function(t, urlParam) {
@@ -184,7 +184,7 @@ angular.module('Api.Request.Service', [
     }
 
     //Combine params out of given params and data and find URL params
-    var params = combineParams(action.params, params, data);
+    params = combineParams(action.params, params, data);
     var urlParams = findUrlParams(request.url);
 
     //Parse URL
@@ -205,7 +205,7 @@ angular.module('Api.Request.Service', [
   /**
    * Api request executer
    */
-  return function $apiRequest(action, params, data) {
+  return function ApiRequest(action, params, data) {
 
     //Parameter juggling
     if (action.hasBody() && params && !data) {
@@ -233,5 +233,5 @@ angular.module('Api.Request.Service', [
       }
       return raw;
     });
-  }
+  };
 });

@@ -99,22 +99,22 @@ angular.module('Api.Service', [
   this.$get = function($injector, $log, $apiEndpoint) {
 
     //Initialize API interface
-    var $api = {};
+    var Api = {};
 
     //Append all endpoints
     angular.forEach(this.endpoints, function(config, name) {
 
       //Warn if overwriting
-      if ($api[name]) {
+      if (Api[name]) {
         $log.warn('API endpoint', name, 'is being overwritten.');
       }
 
       //Extend endpoint config with defaults and initialize it
       config = angular.extend({}, this.defaults, config);
-      $api[name] = new $apiEndpoint(name, config);
+      Api[name] = new $apiEndpoint(name, config);
     }, this);
 
     //Return
-    return $api;
+    return Api;
   };
 });
