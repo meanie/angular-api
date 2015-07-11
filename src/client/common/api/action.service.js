@@ -109,5 +109,5 @@ angular.module('Api.Action.Service', [
   //Return factory function
   return function(action, endpoint) {
     return new ApiAction(action, endpoint);
-  }
+  };
 });

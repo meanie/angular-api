@@ -36,5 +36,5 @@ angular.module('Api.Endpoint.Service', [
   //Return factory function
   return function(name, config) {
     return new ApiEndpoint(name, config);
-  }
+  };
 });
