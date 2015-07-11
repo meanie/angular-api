@@ -10,19 +10,76 @@ angular.module('Api.Service', [
 /**
  * Provider definition
  */
-.provider('Api', function ApiProvider() {
+.provider('$api', function $apiProvider() {
 
-  //Default API wide base URL
-  this.baseUrl = '/';
+  //Defaults
+  this.defaults = {
+    baseUrl: '/',
+    actions: {
+      query: {
+        method: 'GET',
+        isArray: true
+      },
+      get: {
+        method: 'GET'
+      },
+      create: {
+        method: 'POST'
+      },
+      update: {
+        method: 'PUT'
+      },
+      destroy: {
+        method: 'DELETE'
+      }
+    },
+    params: {
+      id: '@id'
+    },
+    model: '$apiModel',
+    stripTrailingSlashes: true
+  };
 
   //Registered endpoints
-  this.endpoints = [];
+  this.endpoints = {};
 
   /**
    * Set base URL
    */
   this.setBaseUrl = function(url) {
-    this.baseUrl = url;
+    this.defaults.baseUrl = url;
+    return this;
+  };
+
+  /**
+   * Set default actions
+   */
+  this.setDefaultActions = function(actions) {
+    this.defaults.actions = actions || {};
+    return this;
+  };
+
+  /**
+   * Set default params
+   */
+  this.setDefaultParams = function(params) {
+    this.defaults.params = params;
+    return this;
+  };
+
+  /**
+   * Set default model
+   */
+  this.setDefaultModel = function(model) {
+    this.defaults.model = model || '';
+    return this;
+  };
+
+  /**
+   * Strip trailing slashes behaviour
+   */
+  this.stripTrailingSlashes = function(strip) {
+    this.defaults.stripTrailingSlashes = !!strip;
     return this;
   };
 
@@ -31,14 +88,7 @@ angular.module('Api.Service', [
    */
   this.registerEndpoint = function(name, config) {
     if (name) {
-
-      //Store endpoints in an array for now, because we can't use the logger service
-      //at this stage to warn users of overwriting an endpoint. We could simply fall back
-      //to console.warn, but that feels dirty.
-      this.endpoints.push({
-        name: name,
-        config: config || {}
-      });
+      this.endpoints[name] = config || {};
     }
     return this;
   };
@@ -46,28 +96,25 @@ angular.module('Api.Service', [
   /**
    * Service getter
    */
-  this.$get = function(ApiEndpoint, Logger) {
+  this.$get = function($injector, $log, $apiEndpoint) {
 
     //Initialize API interface
-    var Api = {};
+    var $api = {};
 
     //Append all endpoints
-    for (var i = 0; i < this.endpoints.length; i++) {
-      var endpoint = this.endpoints[i];
+    angular.forEach(this.endpoints, function(config, name) {
 
       //Warn if overwriting
-      if (Api[endpoint.name]) {
-        Logger.warn('API endpoint', endpoint.name, 'is being overwritten.');
+      if ($api[name]) {
+        $log.warn('API endpoint', name, 'is being overwritten.');
       }
 
-      //Append base URL to config unless already given
-      endpoint.config.baseUrl = endpoint.config.baseUrl || this.baseUrl;
-
-      //Initialize endpoint
-      Api[endpoint.name] = new ApiEndpoint(endpoint.name, endpoint.config);
-    }
+      //Extend endpoint config with defaults and initialize it
+      config = angular.extend({}, this.defaults, config);
+      $api[name] = new $apiEndpoint(name, config);
+    }, this);
 
     //Return
-    return Api;
+    return $api;
   };
 });

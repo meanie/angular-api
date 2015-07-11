@@ -5,64 +5,58 @@
 angular.module('Api.Model', [])
 
 /**
- * Provider definition
+ * Model definition
  */
-.provider('ApiModel', function ApiModelProvider() {
+.factory('$apiModel', function $apiModel() {
 
   /**
-   * Service getter
+   * Constructor
    */
-  this.$get = function() {
+  function $apiModel(data) {
+    this.fromJSON(data);
+  }
 
-    /**
-     * Constructor
-     */
-    function ApiModel(data) {
-      this.fromJSON(data);
+  /**
+   * Init
+   */
+  $apiModel.prototype.init = function() {
+    angular.forEach(this, function(value, key) {
+      delete this[key];
+    }, this);
+  };
+
+  /**
+   * From JSON converter
+   */
+  $apiModel.prototype.fromJSON = function(data) {
+
+    //Init
+    this.init();
+
+    //No data?
+    if (!angular.isObject(data)) {
+      return this;
     }
 
-    /**
-     * Init
-     */
-    ApiModel.prototype.init = function() {
-      angular.forEach(this, function(value, key) {
-        delete this[key];
-      }, this);
-    };
+    //Load from JSON data
+    angular.forEach(data, function(value, key) {
+      this[key] = value;
+    }, this);
 
-    /**
-     * From JSON converter
-     */
-    ApiModel.prototype.fromJSON = function(data) {
-
-      //Init
-      this.init();
-
-      //No data?
-      if (!angular.isObject(data)) {
-        return this;
-      }
-
-      //Load from JSON data
-      angular.forEach(data, function(value, key) {
-        this[key] = value;
-      }, this);
-
-      //Return self
-      return this;
-    };
-
-    /**
-     * To JSON converter
-     */
-    ApiModel.prototype.toJSON = function() {
-
-      //Copy our properties onto a simple object
-      var data = angular.extend({}, this);
-      return data;
-    };
-
-    //Return
-    return ApiModel;
+    //Return self
+    return this;
   };
+
+  /**
+   * To JSON converter
+   */
+  $apiModel.prototype.toJSON = function() {
+
+    //Copy our properties onto a simple object
+    var data = angular.extend({}, this);
+    return data;
+  };
+
+  //Return
+  return $apiModel;
 });
