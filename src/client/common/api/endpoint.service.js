@@ -16,7 +16,7 @@ angular.module('Api.Endpoint.Service', [
   /**
    * Constructor
    */
-  return function ApiEndpoint(name, config) {
+  function ApiEndpoint(name, config) {
 
     //Determine full URL of endpoint
     config.url = $url.concat(config.baseUrl, config.url || $url.concat(name, ':id'));
@@ -28,8 +28,13 @@ angular.module('Api.Endpoint.Service', [
 
     //Create action instances and bind request method to action key on endpoint
     angular.forEach(config.actions, function(action, key) {
-      this.$actions[key] = new $apiAction(action || {}, config);
+      this.$actions[key] = $apiAction(action || {}, config);
       this[key] = angular.bind(this, $apiRequest, this.$actions[key]);
     }, this);
   };
+
+  //Return factory function
+  return function(name, config) {
+    return new ApiEndpoint(name, config);
+  }
 });

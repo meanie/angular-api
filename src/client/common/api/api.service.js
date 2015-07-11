@@ -99,7 +99,9 @@ angular.module('Api.Service', [
   this.$get = function($injector, $log, $apiEndpoint) {
 
     //Initialize API interface
-    var Api = {};
+    var Api = function(endpoint) {
+      return this[endpoint];
+    };
 
     //Append all endpoints
     angular.forEach(this.endpoints, function(config, name) {
@@ -111,7 +113,7 @@ angular.module('Api.Service', [
 
       //Extend endpoint config with defaults and initialize it
       config = angular.extend({}, this.defaults, config);
-      Api[name] = new $apiEndpoint(name, config);
+      Api[name] = $apiEndpoint(name, config);
     }, this);
 
     //Return

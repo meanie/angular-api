@@ -1,7 +1,7 @@
 {
   "name": "meanie-angular-api",
   "description": "An Angular service to add easy to use and fully configurable API interaction for Meanie projects",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "homepage": "https://github.com/meanie/",
   "author": {
     "name": "Adam Buczynski",

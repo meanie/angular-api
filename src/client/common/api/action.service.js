@@ -106,6 +106,8 @@ angular.module('Api.Action.Service', [
     return $q.reject(response);
   };
 
-  //Return
-  return ApiAction;
+  //Return factory function
+  return function(action, endpoint) {
+    return new ApiAction(action, endpoint);
+  }
 });
