@@ -63,7 +63,7 @@ angular.module('Api.Service', [
    * Set default params
    */
   this.setDefaultParams = function(params) {
-    this.defaults.params = params;
+    this.defaults.params = params || {};
     return this;
   };
 
@@ -71,7 +71,7 @@ angular.module('Api.Service', [
    * Set default model
    */
   this.setDefaultModel = function(model) {
-    this.defaults.model = model || '';
+    this.defaults.model = model || false;
     return this;
   };
 
