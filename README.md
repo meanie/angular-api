@@ -169,7 +169,7 @@ angular.module('App.User.Model', [
   };
 
   /**
-   * Save user
+   * Save user shortcut method
    */
   UserModel.prototype.save = function() {
     var method = this.id ? 'update' : 'create';
@@ -192,7 +192,7 @@ var user = $api.users.create({name: 'Meanie'}).then(function(user) {
   user.doSomething();
 });
 
-//Interact with the API through the model methods
+//Interact with exposed API actions through the model methods
 var myUser = new UserModel();
 myUser.name = 'Meanie';
 myUser.save().then(function(user) {
