@@ -31,7 +31,7 @@ angular.module('Api.Endpoint.Service', [
       this.$actions[key] = $apiAction(action || {}, config);
       this[key] = angular.bind(this, $apiRequest, this.$actions[key]);
     }, this);
-  };
+  }
 
   //Return factory function
   return function(name, config) {
