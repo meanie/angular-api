@@ -237,11 +237,12 @@ gulp.task('release', gulp.series(
 ));
 
 /**
- * Testing, linting, watching
+ * Testing, linting, watching and tagging
  */
 gulp.task('test', test);
 gulp.task('lint', lint);
 gulp.task('watch', watch);
+gulp.task('tag', tag);
 
 /**
  * Bump version numbers
