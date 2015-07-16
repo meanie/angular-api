@@ -6,7 +6,7 @@
 [![codacy](https://img.shields.io/codacy/b747cecb5c144b9ba982c5f63d5798a5.svg)](https://www.codacy.com/app/meanie/angular-api)
 [![Join the chat at https://gitter.im/meanie/meanie](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg)](https://gitter.im/meanie/meanie?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-AngularJS module for easy to use and fully configurable API interaction
+AngularJS module for API interaction
 
 ## Installation
 
@@ -56,7 +56,6 @@ angular.module('App.MyModule', ['Api.Service']);
 
 ## Configuration
 
-Configure the API:
 ```js
 angular.module('App').config(function($apiProvider, App) {
 
@@ -104,6 +103,7 @@ angular.module('App').config(function($apiProvider, App) {
 ## Registering endpoints
 
 Register new endpoints in the config function of your modules, for example:
+
 ```js
 angular.module('App.Users').config(function($apiProvider) {
   $apiProvider.registerEndpoint('users', {
@@ -224,8 +224,6 @@ angular.module('App.User.Model', [
 ```
 
 ## Usage
-
-Use the API in your modules:
 
 ```js
 //The endpoints return promises which resolve into models
