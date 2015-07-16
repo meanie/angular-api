@@ -19,7 +19,6 @@ var filter = require('gulp-filter');
 var wrapper = require('gulp-wrapper');
 var stylish = require('gulp-jscs-stylish');
 var sourcemaps = require('gulp-sourcemaps');
-var tagVersion = require('gulp-tag-version');
 var ngAnnotate = require('gulp-ng-annotate');
 
 /**
@@ -209,22 +208,27 @@ function majorBump() {
  * Commit the version bump
  */
 function commitBump() {
+  var version = packageJson().version;
   return gulp.src([
     './package.json',
     './bower.json',
     './README.md'
-  ]).pipe(git.commit('Bump version to ' + packageJson().version));
+  ]).pipe(git.commit('Bump version to ' + version));
 }
 
 /**
  * Tag latest commit with current version
  */
-function tag() {
-  return gulp.src([
-    './package.json'
-  ]).pipe(tagVersion({
-    prefix: ''
-  }));
+function tagBump(cb) {
+  var version = packageJson().version;
+  git.tag(version, 'Tag version ' + version, function(error) {
+    if (error) {
+      return cb(error);
+    }
+    git.push('origin', 'master', {
+      args: '--tags'
+    }, cb);
+  });
 }
 
 /*****************************************************************************
@@ -244,19 +248,19 @@ gulp.task('release', gulp.series(
 gulp.task('test', test);
 gulp.task('lint', lint);
 gulp.task('watch', watch);
-gulp.task('tag', tag);
+gulp.task('tag', tagBump);
 
 /**
  * Bump version numbers
  */
 gulp.task('patch', gulp.series(
-  patchBump, commitBump, tag
+  patchBump, commitBump, tagBump
 ));
 gulp.task('minor', gulp.series(
-  minorBump, commitBump, tag
+  minorBump, commitBump, tagBump
 ));
 gulp.task('major', gulp.series(
-  majorBump, commitBump, tag
+  majorBump, commitBump, tagBump
 ));
 
 /**
