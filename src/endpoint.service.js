@@ -5,7 +5,7 @@
 angular.module('Api.Endpoint.Service', [
   'Api.Action.Service',
   'Api.Request.Service',
-  'Utility.Url.Service'
+  'Url.Service'
 ])
 
 /**

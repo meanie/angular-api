@@ -1,8 +1,8 @@
 {
-  "cliVersion": "0.5.0",
-  "destination": "client/common/api",
+  "cliVersion": "0.6.0",
+  "destination": "client/vendor/meanie-angular-api",
   "instructions": "https://github.com/meanie/angular-api#usage",
   "dependencies": {
-    "angular-url": "^0.2.0"
+    "angular-url": "^0.3.0"
   }
 }
