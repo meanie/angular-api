@@ -249,6 +249,8 @@ Please report any bugs, issues, suggestions and feature requests in the [meanie-
 
 ## Contributing
 
+Pull requests are welcome! Please create them against the [dev branch](https://github.com/meanie/angular-api/tree/dev) of the repository.
+
 If you would like to contribute to Meanie, please check out the [Meanie contributing guidelines](https://github.com/meanie/meanie/blob/master/CONTRIBUTING.md).
 
 ## License
