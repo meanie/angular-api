@@ -3,7 +3,7 @@
  * Module definition and dependencies
  */
 angular.module('Api.Action.Service', [
-  'Utility.Url.Service'
+  'Url.Service'
 ])
 
 /**

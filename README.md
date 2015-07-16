@@ -1,4 +1,4 @@
-# Meanie - Angular API
+# meanie-angular-api
 
 [![npm version](https://img.shields.io/npm/v/meanie-angular-api.svg)](https://www.npmjs.com/package/meanie-angular-api)
 [![node dependencies](https://david-dm.org/meanie/angular-api.svg)](https://david-dm.org/meanie/angular-api)
@@ -6,21 +6,56 @@
 [![codacy](https://img.shields.io/codacy/b747cecb5c144b9ba982c5f63d5798a5.svg)](https://www.codacy.com/app/meanie/angular-api)
 [![Join the chat at https://gitter.im/meanie/meanie](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg)](https://gitter.im/meanie/meanie?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-An Angular service to add easy to use and fully configurable API interaction for [Meanie](https://github.com/meanie/meanie) projects.
+AngularJS module for easy to use and fully configurable API interaction
 
 ## Installation
-Install using the [Meanie CLI](https://www.npmjs.com/package/meanie):
+
+You can install this package using `meanie`, `npm` or `bower`.
+
+### meanie
+
 ```shell
 meanie install angular-api
 ```
 
-## Configuration
-Include the service as a dependency:
+Then add `Api.Service` as a dependency for your app:
+
 ```js
-angular.module('App.MyModule', [
-  'Api.Service'
-]);
+angular.module('App.MyModule', ['Api.Service']);
 ```
+
+### npm
+
+```shell
+npm install meanie-angular-api
+```
+
+Then add as a dependency for your app:
+
+```js
+angular.module('App.MyModule', [require('meanie-angular-api')]);
+```
+
+### bower
+
+```shell
+bower install meanie-angular-api
+```
+
+Add a `<script>` to your `index.html`:
+
+```html
+<script src="/bower_components/meanie-angular-api/release/meanie-angular-api.js"></script>
+```
+
+Then add `Url.Service` as a dependency for your app:
+
+```js
+angular.module('App.MyModule', ['Api.Service']);
+```
+
+## Configuration
+
 Configure the API:
 ```js
 angular.module('App').config(function($apiProvider, App) {
@@ -65,7 +100,9 @@ angular.module('App').config(function($apiProvider, App) {
   $apiProvider.stripTrailingSlashes(false);
 });
 ```
+
 ## Registering endpoints
+
 Register new endpoints in the config function of your modules, for example:
 ```js
 angular.module('App.Users').config(function($apiProvider) {
@@ -90,8 +127,11 @@ angular.module('App.Users').config(function($apiProvider) {
   });
 });
 ```
+
 ### Endpoint configuration
+
 Available options for endpoint configuration are:
+
 #### baseUrl [string]
 The base URL defaults to the API base URL, but you can specify a different base URL for a specific endpoint, for example if connecting to a 3rd party URL.
 
@@ -126,7 +166,9 @@ Specify a custom success response interceptor for the action.
 Specify a custom error response interceptor for the action.
 
 ## Define custom models
+
 You can create custom models and expose API actions from within them:
+
 ```javascript
 /**
  * Module definition and dependencies
@@ -182,7 +224,9 @@ angular.module('App.User.Model', [
 ```
 
 ## Usage
+
 Use the API in your modules:
+
 ```js
 //The endpoints return promises which resolve into models
 var users = $api.users.query(); //An array of UserModel instances
@@ -198,15 +242,15 @@ myUser.name = 'Meanie';
 myUser.save().then(function(user) {
   myUser === user; //User and myUser are the same class instance
 });
+
 ```
 
 ## Issues & feature requests
-Please report any bugs, issues, suggestions and feature requests in the appropriate issue tracker:
-* [Module issue tracker](https://github.com/meanie/angular-api/issues)
-* [Meanie Boilerplate issue tracker](https://github.com/meanie/boilerplate/issues)
-* [Meanie CLI issue tracker](https://github.com/meanie/meanie/issues)
+
+Please report any bugs, issues, suggestions and feature requests in the [meanie-angular-api issue tracker](https://github.com/meanie/angular-api/issues).
 
 ## Contributing
+
 If you would like to contribute to Meanie, please check out the [Meanie contributing guidelines](https://github.com/meanie/meanie/blob/master/CONTRIBUTING.md).
 
 ## License
