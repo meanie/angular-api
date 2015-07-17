@@ -213,8 +213,7 @@ function commitBump() {
   var version = packageJson().version;
   return gulp.src([
     './package.json',
-    './bower.json',
-    './README.md'
+    './bower.json'
   ]).pipe(git.commit('Bump version to ' + version));
 }
 
@@ -250,7 +249,6 @@ gulp.task('release', gulp.series(
 gulp.task('test', test);
 gulp.task('lint', lint);
 gulp.task('watch', watch);
-gulp.task('tag', tagBump);
 
 /**
  * Bump version numbers
