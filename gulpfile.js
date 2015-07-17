@@ -104,7 +104,9 @@ function release() {
   var jsFilter = filter(['*.js']);
   return gulp.src([
     'src/**/*.js',
-  ]).pipe(ngAnnotate())
+  ]).pipe(ngAnnotate({
+    single_quotes: true
+  }))
     .pipe(wrapper(angularWrapper()))
     .pipe(sourcemaps.init())
       .pipe(concat(packageFileName('.js')))

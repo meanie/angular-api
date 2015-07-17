@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v0.4.0 - 16-6-2015
+ * meanie-angular-api - v0.4.1 - 17-6-2015
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2015 Adam Buczynski <me@adambuczynski.com>
@@ -17,7 +17,7 @@ angular.module('Api.Action.Service', [
 /**
  * Factory definition
  */
-.factory('$apiAction', ["$q", "$injector", "$log", "$url", function $apiAction($q, $injector, $log, $url) {
+.factory('$apiAction', ['$q', '$injector', '$log', '$url', function $apiAction($q, $injector, $log, $url) {
 
   /**
    * Return validated model class
@@ -287,7 +287,7 @@ angular.module('Api.Service', [
   /**
    * Service getter
    */
-  this.$get = ["$injector", "$log", "$apiEndpoint", function($injector, $log, $apiEndpoint) {
+  this.$get = ['$injector', '$log', '$apiEndpoint', function($injector, $log, $apiEndpoint) {
 
     //Initialize API interface
     var Api = function(endpoint) {
@@ -328,7 +328,7 @@ angular.module('Api.Endpoint.Service', [
 /**
  * Factory definition
  */
-.factory('$apiEndpoint', ["$url", "$apiAction", "$apiRequest", function $apiEndpoint($url, $apiAction, $apiRequest) {
+.factory('$apiEndpoint', ['$url', '$apiAction', '$apiRequest', function $apiEndpoint($url, $apiAction, $apiRequest) {
 
   /**
    * Constructor
@@ -370,7 +370,7 @@ angular.module('Api.Request.Service', [
 /**
  * Factory definition
  */
-.factory('$apiRequest', ["$http", "$url", function $apiRequest($http, $url) {
+.factory('$apiRequest', ['$http', '$url', function $apiRequest($http, $url) {
 
   /**
    * Check if a data object is a model
