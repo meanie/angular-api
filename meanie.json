@@ -3,6 +3,6 @@
   "packageType": "vendor",
   "instructions": "https://github.com/meanie/angular-api#usage",
   "dependencies": {
-    "angular-url": "^0.3.0"
+    "angular-url": "^0.4.0"
   }
 }
