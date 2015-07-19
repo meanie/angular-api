@@ -17,6 +17,8 @@
   "bugs": {
     "url": "https://github.com/meanie/angular-api/issues"
   },
+  "packageType": "front-end",
+  "instructions": "https://github.com/meanie/angular-api#usage",
   "keywords": [
     "meanie",
     "meanie-module",
@@ -30,8 +32,7 @@
   "files": [
     "release",
     "index.js",
-    "bower.json",
-    "meanie.json"
+    "bower.json"
   ],
   "scripts": {
     "pretest": "gulp lint",
