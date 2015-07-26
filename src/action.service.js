@@ -42,6 +42,7 @@ angular.module('Api.Action.Service', [
     //Set full action url, model and method
     this.url = $url.concat(endpoint.url, this.url || '');
     this.model = this.model || endpoint.model || false;
+    this.params = this.params || endpoint.params || {};
     this.method = this.method || 'GET';
 
     //Validate model

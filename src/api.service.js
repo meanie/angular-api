@@ -14,6 +14,7 @@ angular.module('Api.Service', [
 
   //Defaults
   this.defaults = {
+    verbose: false,
     baseUrl: '/',
     actions: {
       query: {
@@ -113,6 +114,11 @@ angular.module('Api.Service', [
 
       //Extend endpoint config with defaults and initialize it
       config = angular.extend({}, this.defaults, config);
+      if (config.verbose) {
+        $log.info('API endpoint %s: %s', name, config);
+      }
+
+      //Initialize endpoint
       Api[name] = $apiEndpoint(name, config);
     }, this);
 
