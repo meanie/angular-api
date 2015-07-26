@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v0.4.1 - 17-6-2015
+ * meanie-angular-api - v0.4.4 - 26-6-2015
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2015 Adam Buczynski <me@adambuczynski.com>
@@ -50,6 +50,7 @@ angular.module('Api.Action.Service', [
     //Set full action url, model and method
     this.url = $url.concat(endpoint.url, this.url || '');
     this.model = this.model || endpoint.model || false;
+    this.params = this.params || endpoint.params || {};
     this.method = this.method || 'GET';
 
     //Validate model
@@ -205,6 +206,7 @@ angular.module('Api.Service', [
 
   //Defaults
   this.defaults = {
+    verbose: false,
     baseUrl: '/',
     actions: {
       query: {
@@ -304,6 +306,11 @@ angular.module('Api.Service', [
 
       //Extend endpoint config with defaults and initialize it
       config = angular.extend({}, this.defaults, config);
+      if (config.verbose) {
+        $log.info('API endpoint %s: %s', name, config);
+      }
+
+      //Initialize endpoint
       Api[name] = $apiEndpoint(name, config);
     }, this);
 

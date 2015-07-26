@@ -103,7 +103,7 @@ function clean(done) {
 function release() {
   var jsFilter = filter(['*.js']);
   return gulp.src([
-    'src/**/*.js',
+    'src/**/*.js'
   ]).pipe(ngAnnotate({
     single_quotes: true
   }))
