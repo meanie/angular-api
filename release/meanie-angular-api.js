@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v0.4.4 - 26-6-2015
+ * meanie-angular-api - v0.4.5 - 30-6-2015
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2015 Adam Buczynski <me@adambuczynski.com>
@@ -139,25 +139,13 @@ angular.module('Api.Model', [])
    * Constructor
    */
   function ApiModel(data) {
-    this.fromJSON(data);
+    this.fromObject(data);
   }
 
   /**
-   * Init
+   * From plain object converter
    */
-  ApiModel.prototype.init = function() {
-    angular.forEach(this, function(value, key) {
-      delete this[key];
-    }, this);
-  };
-
-  /**
-   * From JSON converter
-   */
-  ApiModel.prototype.fromJSON = function(data) {
-
-    //Init
-    this.init();
+  ApiModel.prototype.fromObject = function(data) {
 
     //No data?
     if (!angular.isObject(data)) {
@@ -174,9 +162,9 @@ angular.module('Api.Model', [])
   };
 
   /**
-   * To JSON converter
+   * To plain object converter
    */
-  ApiModel.prototype.toJSON = function() {
+  ApiModel.prototype.toObject = function() {
 
     //Copy our properties onto a simple object
     var data = angular.extend({}, this);
@@ -383,7 +371,7 @@ angular.module('Api.Request.Service', [
    * Check if a data object is a model
    */
   function isModel(data) {
-    return angular.isObject(data) && angular.isFunction(data.toJSON);
+    return angular.isObject(data) && angular.isFunction(data.toObject);
   }
 
   /**
@@ -546,7 +534,7 @@ angular.module('Api.Request.Service', [
     //Append data if we have a body
     if (action.hasBody() && data) {
       if (isModel(data)) {
-        data = data.toJSON();
+        data = data.toObject();
       }
       request.data = data;
     }
@@ -594,7 +582,7 @@ angular.module('Api.Request.Service', [
     //Then handle the raw data
     return promise.then(function(raw) {
       if (action.hasBody() && isModel(data)) {
-        return data.fromJSON(raw);
+        return data.fromObject(raw);
       }
       else if (expectsModel) {
         return action.convertToModel(raw);
