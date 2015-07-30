@@ -1,11 +1,11 @@
 /**
- * meanie-angular-api - v0.4.5 - 30-6-2015
+ * meanie-angular-api - v0.4.7 - 31-6-2015
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2015 Adam Buczynski <me@adambuczynski.com>
  * License: MIT
  */
-(function (window, angular, undefined) {'use strict';
+(function(window, angular, undefined) {'use strict';
 
 /**
  * Module definition and dependencies
@@ -123,7 +123,7 @@ angular.module('Api.Action.Service', [
 
 })(window, window.angular);
 
-(function (window, angular, undefined) {'use strict';
+(function(window, angular, undefined) {'use strict';
 
 /**
  * Module definition and dependencies
@@ -177,7 +177,7 @@ angular.module('Api.Model', [])
 
 })(window, window.angular);
 
-(function (window, angular, undefined) {'use strict';
+(function(window, angular, undefined) {'use strict';
 
 /**
  * Module definition and dependencies
@@ -223,6 +223,14 @@ angular.module('Api.Service', [
 
   //Registered endpoints
   this.endpoints = {};
+
+  /**
+   * Set verbose
+   */
+  this.setVerbose = function(verbose) {
+    this.defaults.verbose = !!verbose;
+    return this;
+  };
 
   /**
    * Set base URL
@@ -295,7 +303,7 @@ angular.module('Api.Service', [
       //Extend endpoint config with defaults and initialize it
       config = angular.extend({}, this.defaults, config);
       if (config.verbose) {
-        $log.info('API endpoint %s: %s', name, config);
+        $log.info('API endpoint', name + ':', config);
       }
 
       //Initialize endpoint
@@ -309,7 +317,7 @@ angular.module('Api.Service', [
 
 })(window, window.angular);
 
-(function (window, angular, undefined) {'use strict';
+(function(window, angular, undefined) {'use strict';
 
 /**
  * Module definition and dependencies
@@ -353,7 +361,7 @@ angular.module('Api.Endpoint.Service', [
 
 })(window, window.angular);
 
-(function (window, angular, undefined) {'use strict';
+(function(window, angular, undefined) {'use strict';
 
 /**
  * Module definition and dependencies

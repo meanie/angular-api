@@ -54,7 +54,7 @@ function packageFileName(filename, ext) {
  */
 function angularWrapper() {
   return {
-    header: '(function (window, angular, undefined) {\'use strict\';\n',
+    header: '(function(window, angular, undefined) {\'use strict\';\n',
     footer: '\n})(window, window.angular);\n'
   };
 }

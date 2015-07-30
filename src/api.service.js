@@ -45,6 +45,14 @@ angular.module('Api.Service', [
   this.endpoints = {};
 
   /**
+   * Set verbose
+   */
+  this.setVerbose = function(verbose) {
+    this.defaults.verbose = !!verbose;
+    return this;
+  };
+
+  /**
    * Set base URL
    */
   this.setBaseUrl = function(url) {
@@ -115,7 +123,7 @@ angular.module('Api.Service', [
       //Extend endpoint config with defaults and initialize it
       config = angular.extend({}, this.defaults, config);
       if (config.verbose) {
-        $log.info('API endpoint %s: %s', name, config);
+        $log.info('API endpoint', name + ':', config);
       }
 
       //Initialize endpoint
