@@ -1,6 +1,6 @@
 {
   "name": "meanie-angular-api",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "main": "./release/meanie-angular-api.js",
   "ignore": [
     "**/.*",
