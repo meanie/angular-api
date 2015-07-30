@@ -15,7 +15,7 @@ angular.module('Api.Request.Service', [
    * Check if a data object is a model
    */
   function isModel(data) {
-    return angular.isObject(data) && angular.isFunction(data.toJSON);
+    return angular.isObject(data) && angular.isFunction(data.toObject);
   }
 
   /**
@@ -178,7 +178,7 @@ angular.module('Api.Request.Service', [
     //Append data if we have a body
     if (action.hasBody() && data) {
       if (isModel(data)) {
-        data = data.toJSON();
+        data = data.toObject();
       }
       request.data = data;
     }
@@ -226,7 +226,7 @@ angular.module('Api.Request.Service', [
     //Then handle the raw data
     return promise.then(function(raw) {
       if (action.hasBody() && isModel(data)) {
-        return data.fromJSON(raw);
+        return data.fromObject(raw);
       }
       else if (expectsModel) {
         return action.convertToModel(raw);

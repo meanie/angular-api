@@ -13,25 +13,13 @@ angular.module('Api.Model', [])
    * Constructor
    */
   function ApiModel(data) {
-    this.fromJSON(data);
+    this.fromObject(data);
   }
 
   /**
-   * Init
+   * From plain object converter
    */
-  ApiModel.prototype.init = function() {
-    angular.forEach(this, function(value, key) {
-      delete this[key];
-    }, this);
-  };
-
-  /**
-   * From JSON converter
-   */
-  ApiModel.prototype.fromJSON = function(data) {
-
-    //Init
-    this.init();
+  ApiModel.prototype.fromObject = function(data) {
 
     //No data?
     if (!angular.isObject(data)) {
@@ -48,9 +36,9 @@ angular.module('Api.Model', [])
   };
 
   /**
-   * To JSON converter
+   * To plain object converter
    */
-  ApiModel.prototype.toJSON = function() {
+  ApiModel.prototype.toObject = function() {
 
     //Copy our properties onto a simple object
     var data = angular.extend({}, this);
