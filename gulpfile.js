@@ -64,6 +64,9 @@ function angularWrapper() {
  */
 function bannerWrapper() {
 
+  //Refresh package JSON
+  packageJson();
+
   //Get date and author
   var today = new Date();
   var date = today.getDate() + '-' + today.getMonth() + '-' + today.getFullYear();
