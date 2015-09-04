@@ -64,6 +64,9 @@ function angularWrapper() {
  */
 function bannerWrapper() {
 
+  //Refresh package JSON
+  packageJson();
+
   //Get date and author
   var today = new Date();
   var date = today.getDate() + '-' + today.getMonth() + '-' + today.getFullYear();
@@ -213,7 +216,8 @@ function commitBump() {
   var version = packageJson().version;
   return gulp.src([
     './package.json',
-    './bower.json'
+    './bower.json',
+    './release/*'
   ]).pipe(git.commit('Bump version to ' + version));
 }
 
@@ -254,13 +258,13 @@ gulp.task('watch', watch);
  * Bump version numbers
  */
 gulp.task('patch', gulp.series(
-  patchBump, commitBump, tagBump
+  patchBump, release, commitBump, tagBump
 ));
 gulp.task('minor', gulp.series(
-  minorBump, commitBump, tagBump
+  minorBump, release, commitBump, tagBump
 ));
 gulp.task('major', gulp.series(
-  majorBump, commitBump, tagBump
+  majorBump, release, commitBump, tagBump
 ));
 
 /**
