@@ -19,14 +19,23 @@ angular.module('Api.Model', [])
   /**
    * From plain object converter
    */
-  ApiModel.prototype.fromObject = function(data) {
+  ApiModel.prototype.fromObject = function(data, merge) {
+
+    //Unless merging, delete any existing keys
+    if (!merge) {
+      for (var key in this) {
+        if (this.hasOwnProperty(key)) {
+          delete this[key];
+        }
+      }
+    }
 
     //No data?
     if (!angular.isObject(data)) {
       return this;
     }
 
-    //Load from JSON data
+    //Load from object data
     angular.forEach(data, function(value, key) {
       this[key] = value;
     }, this);

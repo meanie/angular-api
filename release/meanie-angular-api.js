@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v0.4.7 - 31-6-2015
+ * meanie-angular-api - v0.4.8 - 4-8-2015
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2015 Adam Buczynski <me@adambuczynski.com>
@@ -145,14 +145,23 @@ angular.module('Api.Model', [])
   /**
    * From plain object converter
    */
-  ApiModel.prototype.fromObject = function(data) {
+  ApiModel.prototype.fromObject = function(data, merge) {
+
+    //Unless merging, delete any existing keys
+    if (!merge) {
+      for (var key in this) {
+        if (this.hasOwnProperty(key)) {
+          delete this[key];
+        }
+      }
+    }
 
     //No data?
     if (!angular.isObject(data)) {
       return this;
     }
 
-    //Load from JSON data
+    //Load from object data
     angular.forEach(data, function(value, key) {
       this[key] = value;
     }, this);
