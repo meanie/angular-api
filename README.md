@@ -79,7 +79,7 @@ angular.module('App').config(function($apiProvider, App) {
     update: {
       method: 'PUT'
     },
-    destroy: {
+    delete: {
       method: 'DELETE'
     }
   });

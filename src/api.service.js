@@ -30,7 +30,7 @@ angular.module('Api.Service', [
       update: {
         method: 'PUT'
       },
-      destroy: {
+      delete: {
         method: 'DELETE'
       }
     },
