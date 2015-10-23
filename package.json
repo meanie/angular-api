@@ -39,7 +39,7 @@
     "test": "gulp test"
   },
   "dependencies": {
-    "meanie-angular-url": "^0.4.0"
+    "meanie-angular-url": "^1.0.0"
   },
   "devDependencies": {
     "angular": "^1.4.7",
