@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v0.5.3 - 4-8-2015
+ * meanie-angular-api - v1.0.0 - 23-9-2015
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2015 Adam Buczynski <me@adambuczynski.com>
@@ -219,7 +219,7 @@ angular.module('Api.Service', [
       update: {
         method: 'PUT'
       },
-      destroy: {
+      delete: {
         method: 'DELETE'
       }
     },
