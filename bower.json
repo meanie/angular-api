@@ -11,6 +11,6 @@
   ],
   "dependencies": {
     "angular": "^1.4.7",
-    "meanie-angular-url": "^1.0.0"
+    "meanie-angular-url": "^1.0.5"
   }
 }

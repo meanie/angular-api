@@ -6,10 +6,10 @@
 var fs = require('fs');
 var del = require('del');
 var gulp = require('gulp');
+var karma = require('karma');
 var git = require('gulp-git');
 var bump = require('gulp-bump');
 var jscs = require('gulp-jscs');
-var karma = require('gulp-karma');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
@@ -148,20 +148,17 @@ function lint() {
 /**
  * Run unit tests
  */
-function test() {
-  return gulp.src([
-    'node_modules/angular/angular.js',
-    'node_modules/angular-mocks/angular-mocks.js',
-    'src/**/*.js',
-    'tests/**/*.spec.js'
-  ]).pipe(karma({
-      configFile: 'karma.conf.js',
-      action: 'run'
-    }))
-    .on('error', function(err) {
-      //Make sure failed tests cause gulp to exit non-zero
-      throw err;
-    });
+function test(done) {
+  new karma.Server({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true,
+    files: [
+      'node_modules/angular/angular.js',
+      'node_modules/angular-mocks/angular-mocks.js',
+      'src/**/*.js',
+      'tests/**/*.spec.js'
+    ]
+  }, done).start();
 }
 
 /**
