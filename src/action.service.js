@@ -96,7 +96,7 @@ angular.module('Api.Action.Service', [
       //Issue warning
       $log.warn(
         'Expected', expectsArray ? 'array' : 'object',
-        'as response, got', response.data
+        'as response, got', isArray ? 'array' : (typeof response.data)
       );
 
       //Enforce data format?
