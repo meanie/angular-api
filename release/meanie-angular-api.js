@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.1.0 - 23-11-2015
+ * meanie-angular-api - v1.1.1 - 23-11-2015
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2015 Adam Buczynski <me@adambuczynski.com>
@@ -104,7 +104,7 @@ angular.module('Api.Action.Service', [
       //Issue warning
       $log.warn(
         'Expected', expectsArray ? 'array' : 'object',
-        'as response, got', response.data
+        'as response, got', isArray ? 'array' : (typeof response.data)
       );
 
       //Enforce data format?
