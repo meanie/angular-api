@@ -15,6 +15,7 @@ angular.module('Api.Service', [
   //Defaults
   this.defaults = {
     verbose: false,
+    enforceDataFormat: false,
     baseUrl: '/',
     actions: {
       query: {
@@ -57,6 +58,14 @@ angular.module('Api.Service', [
    */
   this.setBaseUrl = function(url) {
     this.defaults.baseUrl = url;
+    return this;
+  };
+
+  /**
+   * Set data format enforcing
+   */
+  this.setEnforceDataFormat = function(enforce) {
+    this.defaults.enforceDataFormat = !!enforce;
     return this;
   };
 
