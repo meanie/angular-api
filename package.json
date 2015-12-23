@@ -1,7 +1,7 @@
 {
   "name": "meanie-angular-api",
   "description": "AngularJS module for API interaction",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "homepage": "https://github.com/meanie/angular-api",
   "author": {
     "name": "Adam Buczynski",

@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.0.2 - 4-10-2015
+ * meanie-angular-api - v1.1.0 - 23-11-2015
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2015 Adam Buczynski <me@adambuczynski.com>
@@ -52,6 +52,7 @@ angular.module('Api.Action.Service', [
     this.model = this.model || endpoint.model || false;
     this.params = this.params || endpoint.params || {};
     this.method = this.method || 'GET';
+    this.enforceDataFormat = endpoint.enforceDataFormat || false;
 
     //Validate model
     this.model = validatedModel(this.model);
@@ -95,13 +96,21 @@ angular.module('Api.Action.Service', [
 
     //Check if we expect an array
     var expectsArray = this.expectsArray();
+    var isArray = angular.isArray(response.data);
 
     //Validate data type
-    if (angular.isArray(response.data) !== expectsArray) {
+    if (isArray !== expectsArray) {
+
+      //Issue warning
       $log.warn(
         'Expected', expectsArray ? 'array' : 'object',
         'as response, got', response.data
       );
+
+      //Enforce data format?
+      if (this.enforceDataFormat) {
+        response.data = (expectsArray ? [] : {});
+      }
     }
 
     //Initialize if empty
@@ -204,6 +213,7 @@ angular.module('Api.Service', [
   //Defaults
   this.defaults = {
     verbose: false,
+    enforceDataFormat: false,
     baseUrl: '/',
     actions: {
       query: {
@@ -246,6 +256,14 @@ angular.module('Api.Service', [
    */
   this.setBaseUrl = function(url) {
     this.defaults.baseUrl = url;
+    return this;
+  };
+
+  /**
+   * Set data format enforcing
+   */
+  this.setEnforceDataFormat = function(enforce) {
+    this.defaults.enforceDataFormat = !!enforce;
     return this;
   };
 
