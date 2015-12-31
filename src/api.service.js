@@ -20,10 +20,12 @@ angular.module('Api.Service', [
     actions: {
       query: {
         method: 'GET',
-        isArray: true
+        isArray: true,
+        isModel: true
       },
       get: {
-        method: 'GET'
+        method: 'GET',
+        isModel: true
       },
       create: {
         method: 'POST'
@@ -38,7 +40,7 @@ angular.module('Api.Service', [
     params: {
       id: '@id'
     },
-    model: '$apiModel',
+    model: '',
     stripTrailingSlashes: true
   };
 

@@ -68,10 +68,12 @@ angular.module('App').config(function($apiProvider, App) {
   $apiProvider.setDefaultActions({
     query: {
       method: 'GET',
-      isArray: true
+      isArray: true,
+      isModel: true
     },
     get: {
-      method: 'GET'
+      method: 'GET',
+      isModel: true
     },
     create: {
       method: 'POST'
@@ -90,11 +92,11 @@ angular.module('App').config(function($apiProvider, App) {
     id: '@id'
   });
 
-  //Set the default model to use for each endpoint, or empty for none
-  //Defaults to $apiModel
-  $apiProvider.setDefaultModel('MyModel');
+  //Set the default model to use for each endpoint
+  //Defaults to none
+  $apiProvider.setDefaultModel('BaseModel');
 
-  //Strip trailing slashes behaviour
+  //Strip trailing slashes behavior
   //Defaults to true
   $apiProvider.stripTrailingSlashes(false);
 });
@@ -110,7 +112,8 @@ angular.module('App.Users').config(function($apiProvider) {
     model: 'UserModel',
     actions: {
       me: {
-        url: 'me/'
+        url: 'me/',
+        isModel: true
       },
       create: {
         method: 'POST'
@@ -174,14 +177,13 @@ You can create custom models and expose API actions from within them:
  * Module definition and dependencies
  */
 angular.module('App.User.Model', [
-  'Api.Service',
-  'Api.Model'
+  'Api.Service'
 ])
 
 /**
  * Model definition
  */
-.factory('UserModel', function($api, $apiModel) {
+.factory('UserModel', function($api) {
 
   //Default data
   var defaultData = {
@@ -189,33 +191,49 @@ angular.module('App.User.Model', [
   };
 
   /**
-   * Extend API model
+   * Constructor
    */
   function UserModel(data) {
-    $apiModel.call(this, data);
+    this.fromObject(data);
   }
-  angular.extend(UserModel.prototype, $apiModel.prototype);
 
   /**
-   * Init
+   * From plain object converter
    */
-  UserModel.prototype.init = function() {
+  UserModel.prototype.fromObject = function(data) {
 
-    //Run through parent method
-    $apiModel.prototype.init.call(this);
+    //Copy data
+    if (angular.isObject(data)) {
+      angular.forEach(data, function(value, key) {
+        this[key] = angular.copy(value);
+      }, this);
+    }
 
-    //Set default data
-    angular.forEach(defaultData, function(value, key) {
-      this[key] = angular.copy(value);
-    }, this);
+    //Return self
+    return this;
+  };
+
+  /**
+   * To plain object converter
+   */
+  UserModel.prototype.toObject = function() {
+    return angular.extend({}, this);
   };
 
   /**
    * Save user shortcut method
    */
   UserModel.prototype.save = function() {
+
+    //Determine api method
     var method = this.id ? 'update' : 'create';
-    return $api.user[method](this);
+
+    //Call method, providing the model instance as data
+    return $api.user[method](this).then(function(data) {
+
+      //Update model with received data and return instance
+      return this.fromObject(data);
+    }.bind(this));
   };
 
   //Return
@@ -235,8 +253,9 @@ var user = $api.users.create({name: 'Meanie'}).then(function(user) {
 });
 
 //Interact with exposed API actions through the model methods
-var myUser = new UserModel();
-myUser.name = 'Meanie';
+var myUser = new UserModel({
+  name: 'Meanie'
+});
 myUser.save().then(function(user) {
   myUser === user; //User and myUser are the same class instance
 });

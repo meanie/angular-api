@@ -1,6 +1,6 @@
 {
   "name": "meanie-angular-api",
-  "description": "AngularJS module for API interaction",
+  "description": "An Angular module for interaction with API's",
   "version": "1.1.1",
   "homepage": "https://github.com/meanie/angular-api",
   "author": {

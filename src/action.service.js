@@ -65,6 +65,13 @@ angular.module('Api.Action.Service', [
   };
 
   /**
+   * Expects model check
+   */
+  ApiAction.prototype.expectsModel = function() {
+    return (this.model && !!this.isModel);
+  };
+
+  /**
    * Convert raw response data to a model
    */
   ApiAction.prototype.convertToModel = function(data) {

@@ -12,13 +12,6 @@ angular.module('Api.Request.Service', [
 .factory('$apiRequest', function $apiRequest($http, $url) {
 
   /**
-   * Check if a data object is a model
-   */
-  function isModel(data) {
-    return angular.isObject(data) && angular.isFunction(data.toObject);
-  }
-
-  /**
    * Check if dotted path is valid
    */
   function isValidDottedPath(path) {
@@ -176,11 +169,18 @@ angular.module('Api.Request.Service', [
     });
 
     //Append data if we have a body
-    if (action.hasBody() && data) {
-      if (isModel(data)) {
-        data = data.toObject();
+    if (action.hasBody() && data && angular.isObject(data)) {
+
+      //If toJson or toObject method present, use that, otherwise convert to simple object manually
+      if (angular.isFunction(data.toJson)) {
+        request.data = data.toJson();
       }
-      request.data = data;
+      else if (angular.isFunction(data.toObject)) {
+        request.data = data.toObject();
+      }
+      else {
+        request.data = angular.extend({}, data);
+      }
     }
 
     //Combine params out of given params and data and find URL params
@@ -213,11 +213,8 @@ angular.module('Api.Request.Service', [
       params = null;
     }
 
-    //Create request config
+    //Create request config and use $http to do the request and intercept the response
     var request = createRequestConfig(action, params, data);
-    var expectsModel = action.model && /^(GET|POST|PUT|PATCH)$/i.test(action.method);
-
-    //Use $http to do the request and intercept the response
     var promise = $http(request).then(
       action.successInterceptor.bind(action),
       action.errorInterceptor.bind(action)
@@ -225,10 +222,7 @@ angular.module('Api.Request.Service', [
 
     //Then handle the raw data
     return promise.then(function(raw) {
-      if (action.hasBody() && isModel(data)) {
-        return data.fromObject(raw);
-      }
-      else if (expectsModel) {
+      if (action.expectsModel()) {
         return action.convertToModel(raw);
       }
       return raw;
