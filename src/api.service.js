@@ -3,8 +3,7 @@
  * Module definition and dependencies
  */
 angular.module('Api.Service', [
-  'Api.Endpoint.Service',
-  'Api.Model'
+  'Api.Endpoint.Service'
 ])
 
 /**
