@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.1.1 - 23-11-2015
+ * meanie-angular-api - v1.2.0 - 31-11-2015
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2015 Adam Buczynski <me@adambuczynski.com>
@@ -73,6 +73,13 @@ angular.module('Api.Action.Service', [
   };
 
   /**
+   * Expects model check
+   */
+  ApiAction.prototype.expectsModel = function() {
+    return (this.model && !!this.isModel);
+  };
+
+  /**
    * Convert raw response data to a model
    */
   ApiAction.prototype.convertToModel = function(data) {
@@ -137,69 +144,6 @@ angular.module('Api.Action.Service', [
 /**
  * Module definition and dependencies
  */
-angular.module('Api.Model', [])
-
-/**
- * Model definition
- */
-.factory('$apiModel', function $apiModel() {
-
-  /**
-   * Constructor
-   */
-  function ApiModel(data) {
-    this.fromObject(data);
-  }
-
-  /**
-   * From plain object converter
-   */
-  ApiModel.prototype.fromObject = function(data, merge) {
-
-    //Unless merging, delete any existing keys
-    if (!merge) {
-      for (var key in this) {
-        if (this.hasOwnProperty(key)) {
-          delete this[key];
-        }
-      }
-    }
-
-    //No data?
-    if (!angular.isObject(data)) {
-      return this;
-    }
-
-    //Load from object data
-    angular.forEach(data, function(value, key) {
-      this[key] = value;
-    }, this);
-
-    //Return self
-    return this;
-  };
-
-  /**
-   * To plain object converter
-   */
-  ApiModel.prototype.toObject = function() {
-
-    //Copy our properties onto a simple object
-    var data = angular.extend({}, this);
-    return data;
-  };
-
-  //Return
-  return ApiModel;
-});
-
-})(window, window.angular);
-
-(function(window, angular, undefined) {'use strict';
-
-/**
- * Module definition and dependencies
- */
 angular.module('Api.Service', [
   'Api.Endpoint.Service',
   'Api.Model'
@@ -218,10 +162,12 @@ angular.module('Api.Service', [
     actions: {
       query: {
         method: 'GET',
-        isArray: true
+        isArray: true,
+        isModel: true
       },
       get: {
-        method: 'GET'
+        method: 'GET',
+        isModel: true
       },
       create: {
         method: 'POST'
@@ -236,7 +182,7 @@ angular.module('Api.Service', [
     params: {
       id: '@id'
     },
-    model: '$apiModel',
+    model: '',
     stripTrailingSlashes: true
   };
 
@@ -403,13 +349,6 @@ angular.module('Api.Request.Service', [
 .factory('$apiRequest', ['$http', '$url', function $apiRequest($http, $url) {
 
   /**
-   * Check if a data object is a model
-   */
-  function isModel(data) {
-    return angular.isObject(data) && angular.isFunction(data.toObject);
-  }
-
-  /**
    * Check if dotted path is valid
    */
   function isValidDottedPath(path) {
@@ -567,11 +506,18 @@ angular.module('Api.Request.Service', [
     });
 
     //Append data if we have a body
-    if (action.hasBody() && data) {
-      if (isModel(data)) {
-        data = data.toObject();
+    if (action.hasBody() && data && angular.isObject(data)) {
+
+      //If toJson or toObject method present, use that, otherwise convert to simple object manually
+      if (angular.isFunction(data.toJson)) {
+        request.data = data.toJson();
       }
-      request.data = data;
+      else if (angular.isFunction(data.toObject)) {
+        request.data = data.toObject();
+      }
+      else {
+        request.data = angular.extend({}, data);
+      }
     }
 
     //Combine params out of given params and data and find URL params
@@ -604,11 +550,8 @@ angular.module('Api.Request.Service', [
       params = null;
     }
 
-    //Create request config
+    //Create request config and use $http to do the request and intercept the response
     var request = createRequestConfig(action, params, data);
-    var expectsModel = action.model && /^(GET|POST|PUT|PATCH)$/i.test(action.method);
-
-    //Use $http to do the request and intercept the response
     var promise = $http(request).then(
       action.successInterceptor.bind(action),
       action.errorInterceptor.bind(action)
@@ -616,10 +559,7 @@ angular.module('Api.Request.Service', [
 
     //Then handle the raw data
     return promise.then(function(raw) {
-      if (action.hasBody() && isModel(data)) {
-        return data.fromObject(raw);
-      }
-      else if (expectsModel) {
+      if (action.expectsModel()) {
         return action.convertToModel(raw);
       }
       return raw;
