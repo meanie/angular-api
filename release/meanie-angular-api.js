@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.2.0 - 31-11-2015
+ * meanie-angular-api - v1.2.1 - 31-11-2015
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2015 Adam Buczynski <me@adambuczynski.com>
@@ -145,8 +145,7 @@ angular.module('Api.Action.Service', [
  * Module definition and dependencies
  */
 angular.module('Api.Service', [
-  'Api.Endpoint.Service',
-  'Api.Model'
+  'Api.Endpoint.Service'
 ])
 
 /**
