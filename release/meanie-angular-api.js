@@ -1,8 +1,8 @@
 /**
- * meanie-angular-api - v1.2.1 - 31-11-2015
+ * meanie-angular-api - v1.2.2 - 10-0-2016
  * https://github.com/meanie/angular-api
  *
- * Copyright (c) 2015 Adam Buczynski <me@adambuczynski.com>
+ * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
  * License: MIT
  */
 (function(window, angular, undefined) {'use strict';
@@ -200,7 +200,11 @@ angular.module('Api.Service', [
    * Set base URL
    */
   this.setBaseUrl = function(url) {
-    this.defaults.baseUrl = url;
+    //TODO: the replacement is protecting port numbers from later becoming
+    //removed on account of the request service url parsing thinking it's a
+    //parameter. The code there should be updated to prevent port replacement,
+    //rather than "protecting" it in this manner here.
+    this.defaults.baseUrl = url.replace(/:([0-9]+)/, '\\:$1');
     return this;
   };
 
