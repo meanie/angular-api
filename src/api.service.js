@@ -58,7 +58,11 @@ angular.module('Api.Service', [
    * Set base URL
    */
   this.setBaseUrl = function(url) {
-    this.defaults.baseUrl = url;
+    //TODO: the replacement is protecting port numbers from later becoming
+    //removed on account of the request service url parsing thinking it's a
+    //parameter. The code there should be updated to prevent port replacement,
+    //rather than "protecting" it in this manner here.
+    this.defaults.baseUrl = url.replace(/:([0-9]+)/, '\\:$1');
     return this;
   };
 
