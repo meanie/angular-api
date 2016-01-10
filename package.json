@@ -41,7 +41,7 @@
     "pretest": "npm run lint",
     "test": "karma start karma.conf.js",
     "version": "gulp release && git add release/*",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags && npm publish"
   },
   "dependencies": {
     "meanie-angular-url": "^1.0.5"
