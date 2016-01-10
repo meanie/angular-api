@@ -35,7 +35,7 @@ module.exports = function(config) {
     logLevel: config.LOG_INFO,
 
     //Enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
+    autoWatch: false,
 
     //Start these browsers (see https://npmjs.org/browse/keyword/karma-launcher)
     browsers: ['PhantomJS'],

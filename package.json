@@ -40,7 +40,7 @@
     "lint:jscs": "jscs . --reporter=node_modules/jscs-stylish",
     "pretest": "npm run lint",
     "test": "karma start karma.conf.js",
-    "preversion": "npm test && gulp release",
+    "version": "gulp release && git add release/*",
     "postversion": "git push && git push --tags"
   },
   "dependencies": {
