@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.3.0 - 11-0-2016
+ * meanie-angular-api - v1.3.1 - 11-0-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
