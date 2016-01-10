@@ -6,35 +6,25 @@
 [![codacy](https://img.shields.io/codacy/b747cecb5c144b9ba982c5f63d5798a5.svg)](https://www.codacy.com/app/meanie/angular-api)
 [![Join the chat at https://gitter.im/meanie/meanie](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg)](https://gitter.im/meanie/meanie?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-AngularJS module for API interaction
+An Angular service for interaction with API's
 
 ## Installation
 
-You can install this package using `meanie`, `npm` or `bower`.
-
-### meanie
-
-```shell
-meanie install angular-api
-```
-
-Then add `Api.Service` as a dependency for your app:
-
-```js
-angular.module('App.MyModule', ['Api.Service']);
-```
+You can install this package using `npm` or `bower`.
 
 ### npm
 
 ```shell
-npm install meanie-angular-api
+npm install meanie-angular-api --save
 ```
 
-Then add as a dependency for your app:
+Include the script `node_modules/meanie-angular-api/release/meanie-angular-api.js` in your build process, or add it via a `<script>` tag to your `index.html`:
 
-```js
-angular.module('App.MyModule', [require('meanie-angular-api')]);
+```html
+<script src="node_modules/meanie-angular-api/release/meanie-angular-api.js"></script>
 ```
+
+Add `Api.Service` as a dependency for your app.
 
 ### bower
 
@@ -42,22 +32,20 @@ angular.module('App.MyModule', [require('meanie-angular-api')]);
 bower install meanie-angular-api
 ```
 
-Add a `<script>` to your `index.html`:
+Include the script `bower_components/meanie-angular-api/release/meanie-angular-api.js` in your build process, or add it via a `<script>` tag to your `index.html`:
 
 ```html
-<script src="/bower_components/meanie-angular-api/release/meanie-angular-api.js"></script>
+<script src="bower_components/meanie-angular-api/release/meanie-angular-api.js"></script>
 ```
 
-Then add `Url.Service` as a dependency for your app:
-
-```js
-angular.module('App.MyModule', ['Api.Service']);
-```
+Add `Api.Service` as a dependency for your app.
 
 ## Configuration
 
 ```js
-angular.module('App').config(function($apiProvider, App) {
+angular.module('App', [
+  'Api.Service'
+]).config(function($apiProvider, App) {
 
   //Set API wide base URL
   //Defaults to /
@@ -275,4 +263,4 @@ If you would like to contribute to Meanie, please check out the [Meanie contribu
 ## License
 (MIT License)
 
-Copyright 2015, [Adam Buczynski](http://adambuczynski.com)
+Copyright 2015-2016, [Adam Buczynski](http://adambuczynski.com)

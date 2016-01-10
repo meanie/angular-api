@@ -1,7 +1,7 @@
 {
   "name": "meanie-angular-api",
-  "description": "An Angular module for interaction with API's",
-  "version": "1.2.1",
+  "description": "An Angular service for interaction with API's",
+  "version": "1.2.2",
   "homepage": "https://github.com/meanie/angular-api",
   "author": {
     "name": "Adam Buczynski",
@@ -35,25 +35,23 @@
     "bower.json"
   ],
   "scripts": {
-    "pretest": "gulp lint",
-    "test": "gulp test"
+    "lint": "npm run lint:jshint && npm run lint:jscs",
+    "lint:jshint": "jshint . --reporter=node_modules/jshint-stylish",
+    "lint:jscs": "jscs . --reporter=node_modules/jscs-stylish",
+    "pretest": "npm run lint",
+    "test": "karma start karma.conf.js",
+    "preversion": "npm test && gulp release",
+    "postversion": "git push && git push --tags"
   },
   "dependencies": {
     "meanie-angular-url": "^1.0.5"
   },
   "devDependencies": {
-    "angular": "^1.4.7",
-    "angular-mocks": "^1.4.7",
-    "del": "^2.0.1",
+    "angular": "^1.4.8",
+    "angular-mocks": "^1.4.8",
     "gulp": "gulpjs/gulp#4.0",
-    "gulp-bump": "^1.0.0",
-    "gulp-cached": "^1.1.0",
     "gulp-concat": "^2.6.0",
     "gulp-filter": "^3.0.1",
-    "gulp-git": "^1.6.0",
-    "gulp-jscs": "^3.0.1",
-    "gulp-jscs-stylish": "^1.2.1",
-    "gulp-jshint": "^1.11.0",
     "gulp-ng-annotate": "^1.0.0",
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^1.6.0",
@@ -61,13 +59,14 @@
     "gulp-wrapper": "^1.0.0",
     "jasmine-core": "^2.3.4",
     "jasmine-spec-reporter": "^2.2.3",
-    "jscs": "^2.3.5",
-    "jshint": "^2.8.0",
+    "jscs": "^2.8.0",
+    "jscs-stylish": "^0.3.1",
+    "jshint": "^2.9.1-rc2",
     "jshint-stylish": "^2.0.1",
     "karma": "^0.13.14",
     "karma-jasmine": "^0.3.5",
     "karma-phantomjs-launcher": "^0.2.1",
-    "karma-spec-reporter": "^0.0.20",
+    "karma-spec-reporter": "^0.0.23",
     "phantomjs": "^1.9.18"
   }
 }

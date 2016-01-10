@@ -22,7 +22,7 @@
 		"inject": false,
 		"expect": false
 	},
-	"latedef": true,
+	"latedef": "nofunc",
 	"noarg": true,
 	"nonew": true,
 	"notypeof": true,
