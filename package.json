@@ -43,7 +43,7 @@
     "version": "gulp release && git add release/*",
     "postversion": "git push && git push --tags && npm publish"
   },
-  "dependencies": {
+  "peerDependencies": {
     "meanie-angular-url": "^1.0.5"
   },
   "devDependencies": {
