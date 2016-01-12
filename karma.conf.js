@@ -41,6 +41,9 @@ module.exports = function(config) {
     browsers: ['PhantomJS'],
 
     //Continuous integration mode
-    singleRun: true
+    singleRun: true,
+
+    //Don't fail on empty test suite
+    failOnEmptyTestSuite: false
   });
 };
