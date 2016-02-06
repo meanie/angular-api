@@ -10,7 +10,7 @@ angular.module('BaseModel.Service', [])
 .factory('$baseModel', function($window, $injector) {
 
   //See if we have the moment service available to us
-  let moment;
+  var moment;
   if ($injector.has('moment')) {
     moment = $injector.get('moment');
   }
@@ -23,9 +23,9 @@ angular.module('BaseModel.Service', [])
    * Returns a moment if it is and null if it's not
    */
   function dateStringToMoment(value) {
-    let regex = /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2}).*/;
+    var regex = /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2}).*/;
     if (value.match(regex)) {
-      let date = moment(value, moment.ISO_8601, true);
+      var date = moment(value, moment.ISO_8601, true);
       if (date.isValid()) {
         return date;
       }
@@ -60,7 +60,7 @@ angular.module('BaseModel.Service', [])
    * To JSON converter
    */
   $baseModel.prototype.toJSON = function(data) {
-    let json = {};
+    var json = {};
     if (data && angular.isObject(data)) {
       angular.forEach(data, (value, key) => {
         json[key] = $baseModel.valueToJSON(value);
@@ -78,8 +78,8 @@ angular.module('BaseModel.Service', [])
    * Extract a subset of data from the model
    */
   $baseModel.prototype.extract = function(properties) {
-    let obj = {};
-    let subset = (angular.isArray(properties) && properties.length);
+    var obj = {};
+    var subset = (angular.isArray(properties) && properties.length);
     angular.forEach(this, (value, key) => {
       if (!subset || properties.indexOf(key) >= 0) {
         obj[key] = angular.copy(value);
@@ -92,7 +92,7 @@ angular.module('BaseModel.Service', [])
    * Clear own properties
    */
   $baseModel.prototype.clear = function() {
-    for (let key in this) {
+    for (var key in this) {
       if (this.hasOwnProperty(key)) {
         delete this[key];
       }
@@ -103,7 +103,7 @@ angular.module('BaseModel.Service', [])
    * Clone
    */
   $baseModel.prototype.clone = function() {
-    let ModelClass = this.constructor;
+    var ModelClass = this.constructor;
     return new ModelClass(this.extract());
   };
 
@@ -119,7 +119,7 @@ angular.module('BaseModel.Service', [])
       return value.map($baseModel.valueFromJSON);
     }
     else if (moment && angular.isString(value)) {
-      let date = dateStringToMoment(value);
+      var date = dateStringToMoment(value);
       return date || value;
     }
     return angular.copy(value);
@@ -136,8 +136,8 @@ angular.module('BaseModel.Service', [])
       if (angular.isFunction(value.toJSON)) {
         return value.toJSON();
       }
-      let copy = {};
-      for (let prop in value) {
+      var copy = {};
+      for (var prop in value) {
         if (value.hasOwnProperty(prop)) {
           copy[prop] = $baseModel.valueToJSON(value[prop]);
         }
