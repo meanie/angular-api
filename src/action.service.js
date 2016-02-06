@@ -78,12 +78,10 @@ angular.module('Api.Action.Service', [
 
     //Array given?
     if (angular.isArray(data)) {
-      return data.map(function(element) {
-        return this.convertToModel(element);
-      }, this);
+      return data.map(this.convertToModel.bind(this));
     }
 
-    //Instantiate new model
+    //Get model class and return model instance
     var Model = $injector.get(this.model);
     return new Model(data);
   };

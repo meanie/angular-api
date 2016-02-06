@@ -97,7 +97,7 @@ Register new endpoints in the config function of your modules, for example:
 ```js
 angular.module('App.Users').config(function($apiProvider) {
   $apiProvider.registerEndpoint('users', {
-    model: 'UserModel',
+    model: 'User',
     actions: {
       me: {
         url: 'me/',
@@ -111,8 +111,7 @@ angular.module('App.Users').config(function($apiProvider) {
       },
       exists: {
         method: 'POST',
-        url: 'exists/',
-        model: false
+        url: 'exists/'
       }
     }
   });
@@ -127,10 +126,10 @@ Available options for endpoint configuration are:
 The base URL defaults to the API base URL, but you can specify a different base URL for a specific endpoint, for example if connecting to a 3rd party URL.
 
 #### url [string]
-The url part of an endpoint defaults to its name, but you can override it by specifying a custom url .
+The url part of an endpoint defaults to its name, but you can override it by specifying a custom url.
 
-#### model [string | bool]
-You can specify a custom default model per endpoint, or set it to `false` to not use model wrapping for the endpoint or `true` to use the default model.
+#### model [string]
+Name of the service to use for JSON to model conversion.
 
 #### actions [object]
 A hash of actions with the action name/accessor as keys and the action config as values.
@@ -141,14 +140,17 @@ Action specific configuration will override global endpoint configuration. Avail
 #### url [string]
 The url part of an action defaults to `/`, but you can specify a different URL. It will be concatenated to the endpoint URL.
 
-#### model [string | bool]
-You can use a custom model for specific actions, disable model wrapping by specifying `false`, or use the default model by specifying `true`.
-
 #### method [string]
 Specify the action HTTP request method, defaults to `GET`.
 
+#### model [string]
+Name of the service to use for JSON to model conversion.
+
 #### isArray [bool]
 Specify whether the action expects an array as a response, defaults to `false`.
+
+#### isModel [bool]
+Specify whether the received JSON data should be converted to a model, defaults to `false`. When `isArray` is `true`, it will convert each object in the array to a model.
 
 #### successInterceptor [function]
 Specify a custom success response interceptor for the action.
@@ -158,74 +160,55 @@ Specify a custom error response interceptor for the action.
 
 ## Define custom models
 
-You can create custom models and expose API actions from within them:
+You can create custom models and expose API actions from within them. It is recommended to use the supplied `$baseModel` service as a base for your own models, as it comes with handy to/from JSON converters.
 
 ```javascript
 /**
  * Module definition and dependencies
  */
 angular.module('App.User.Model', [
-  'Api.Service'
+  'Api.Service',
+  'BaseModel.Service'
 ])
 
 /**
  * Model definition
  */
-.factory('UserModel', function($api) {
+.factory('User', function($api, $baseModel) {
 
   //Default data
-  var defaultData = {
+  let defaultData = {
     name: 'Guest'
   };
 
   /**
    * Constructor
    */
-  function UserModel(data) {
-    this.fromObject(data);
+  function User(data) {
+    $baseModel.call(this, data);
   }
 
   /**
-   * From plain object converter
+   * Extend prototype
    */
-  UserModel.prototype.fromObject = function(data) {
-
-    //Copy data
-    if (angular.isObject(data)) {
-      angular.forEach(data, function(value, key) {
-        this[key] = angular.copy(value);
-      }, this);
-    }
-
-    //Return self
-    return this;
-  };
+  angular.extend(User.prototype, $baseModel.prototype);
 
   /**
-   * To plain object converter
+   * Save user
    */
-  UserModel.prototype.toObject = function() {
-    return angular.extend({}, this);
-  };
+  User.prototype.save = function(data) {
 
-  /**
-   * Save user shortcut method
-   */
-  UserModel.prototype.save = function() {
+    //Extend instance data with optionally given extra data
+    data = this.toJSON(data);
 
-    //Determine api method
-    var method = this.id ? 'update' : 'create';
-
-    //Call method, providing the model instance as data
-    return $api.user[method](this).then(function(data) {
-
-      //Update model with received data and return instance
-      return this.fromObject(data);
-    }.bind(this));
+    //Determine method and call API
+    let self = this;
+    let method = this.id ? 'update' : 'create';
+    return $api.user[method](data).then(data => self.fromJSON(data));
   };
 
   //Return
-  return UserModel;
+  return User;
 });
 ```
 
@@ -233,18 +216,18 @@ angular.module('App.User.Model', [
 
 ```js
 //The endpoints return promises which resolve into models
-var users = $api.users.query(); //An array of UserModel instances
+let users = $api.users.query(); //An array of UserModel instances
 
 //You can also interact with the model and modify it before resolving
-var user = $api.users.create({name: 'Meanie'}).then(function(user) {
+let user = $api.users.create({name: 'Meanie'}).then(user => {
   user.doSomething();
 });
 
 //Interact with exposed API actions through the model methods
-var myUser = new UserModel({
+let myUser = new User({
   name: 'Meanie'
 });
-myUser.save().then(function(user) {
+myUser.save().then(user => {
   myUser === user; //User and myUser are the same class instance
 });
 

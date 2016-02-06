@@ -171,11 +171,16 @@ angular.module('Api.Request.Service', [
     //Append data if we have a body
     if (action.hasBody() && data && angular.isObject(data)) {
 
-      //If toJson or toObject method present, use that, otherwise convert to simple object manually
+      //If toJson method present, use that, otherwise convert to simple object
       if (angular.isFunction(data.toJson)) {
         request.data = data.toJson();
       }
       else if (angular.isFunction(data.toObject)) {
+        //TODO: remove altogether in next major release
+        console.warn(
+          'Using `toObject` for model to JSON conversion is deprecated.\n',
+          'Please provide a `toJSON` method on your model instead.'
+        );
         request.data = data.toObject();
       }
       else {
