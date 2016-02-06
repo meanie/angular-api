@@ -49,7 +49,7 @@ angular.module('BaseModel.Service', [])
    */
   $baseModel.prototype.fromJSON = function(json) {
     if (angular.isObject(json)) {
-      angular.forEach(json, (value, key) => {
+      angular.forEach(json, function(value, key) {
         this[key] = $baseModel.valueFromJSON(value);
       }, this);
     }
@@ -62,11 +62,11 @@ angular.module('BaseModel.Service', [])
   $baseModel.prototype.toJSON = function(data) {
     var json = {};
     if (data && angular.isObject(data)) {
-      angular.forEach(data, (value, key) => {
+      angular.forEach(data, function(value, key) {
         json[key] = $baseModel.valueToJSON(value);
       });
     }
-    angular.forEach(this, (value, key) => {
+    angular.forEach(this, function(value, key) {
       if (typeof json[key] === 'undefined') {
         json[key] = $baseModel.valueToJSON(value);
       }
@@ -80,7 +80,7 @@ angular.module('BaseModel.Service', [])
   $baseModel.prototype.extract = function(properties) {
     var obj = {};
     var subset = (angular.isArray(properties) && properties.length);
-    angular.forEach(this, (value, key) => {
+    angular.forEach(this, function(value, key) {
       if (!subset || properties.indexOf(key) >= 0) {
         obj[key] = angular.copy(value);
       }
