@@ -82,7 +82,7 @@ angular.module('App', [
 
   //Set the default model to use for each endpoint
   //Defaults to none
-  $apiProvider.setDefaultModel('BaseModel');
+  $apiProvider.setDefaultModel('$baseModel');
 
   //Strip trailing slashes behavior
   //Defaults to true
