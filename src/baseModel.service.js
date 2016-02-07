@@ -89,6 +89,17 @@ angular.module('BaseModel.Service', [])
   };
 
   /**
+   * Merge a set of data into the model
+   */
+  $baseModel.prototype.merge = function(data) {
+    if (data && angular.isObject(data)) {
+      angular.forEach(data, function(value, key) {
+        this[key] = angular.copy(value);
+      });
+    }
+  };
+
+  /**
    * Clear own properties
    */
   $baseModel.prototype.clear = function() {
