@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.4.1 - 7-1-2016
+ * meanie-angular-api - v1.4.2 - 7-1-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -380,6 +380,17 @@ angular.module('BaseModel.Service', [])
       }
     });
     return obj;
+  };
+
+  /**
+   * Merge a set of data into the model
+   */
+  $baseModel.prototype.merge = function(data) {
+    if (data && angular.isObject(data)) {
+      angular.forEach(data, function(value, key) {
+        this[key] = angular.copy(value);
+      });
+    }
   };
 
   /**
