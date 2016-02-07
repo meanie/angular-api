@@ -67,7 +67,7 @@ angular.module('BaseModel.Service', [])
       });
     }
     angular.forEach(this, function(value, key) {
-      if (typeof json[key] === 'undefined') {
+      if (!json.hasOwnProperty(key)) {
         json[key] = $baseModel.valueToJSON(value);
       }
     });
