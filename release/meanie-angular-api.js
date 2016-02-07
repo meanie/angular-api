@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.4.0 - 7-1-2016
+ * meanie-angular-api - v1.4.1 - 7-1-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -361,7 +361,7 @@ angular.module('BaseModel.Service', [])
       });
     }
     angular.forEach(this, function(value, key) {
-      if (typeof json[key] === 'undefined') {
+      if (!json.hasOwnProperty(key)) {
         json[key] = $baseModel.valueToJSON(value);
       }
     });
