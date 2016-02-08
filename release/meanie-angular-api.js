@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.4.2 - 7-1-2016
+ * meanie-angular-api - v1.4.3 - 9-1-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -259,7 +259,7 @@ angular.module('Api.Service', [
   /**
    * Service getter
    */
-  this.$get = ['$injector', '$log', '$apiEndpoint', function($injector, $log, $apiEndpoint) {
+  this.$get = ['$log', '$apiEndpoint', function($log, $apiEndpoint) {
 
     //Initialize API interface
     var Api = function(endpoint) {
@@ -274,7 +274,7 @@ angular.module('Api.Service', [
         $log.warn('API endpoint', name, 'is being overwritten.');
       }
 
-      //Extend endpoint config with defaults and initialize it
+      //Extend endpoint config with defaults
       config = angular.extend({}, this.defaults, config);
       if (config.verbose) {
         $log.info('API endpoint', name + ':', config);
