@@ -202,9 +202,8 @@ angular.module('App.User.Model', [
     data = this.toJSON(data);
 
     //Determine method and call API
-    let self = this;
     let method = this.id ? 'update' : 'create';
-    return $api.user[method](data).then(data => self.fromJSON(data));
+    return $api.user[method](data).then(data => this.fromJSON(data));
   };
 
   //Return

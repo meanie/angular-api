@@ -119,7 +119,7 @@ angular.module('Api.Service', [
   /**
    * Service getter
    */
-  this.$get = function($injector, $log, $apiEndpoint) {
+  this.$get = function($log, $apiEndpoint) {
 
     //Initialize API interface
     var Api = function(endpoint) {
@@ -134,7 +134,7 @@ angular.module('Api.Service', [
         $log.warn('API endpoint', name, 'is being overwritten.');
       }
 
-      //Extend endpoint config with defaults and initialize it
+      //Extend endpoint config with defaults
       config = angular.extend({}, this.defaults, config);
       if (config.verbose) {
         $log.info('API endpoint', name + ':', config);
