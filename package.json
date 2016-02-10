@@ -44,29 +44,29 @@
     "postversion": "git push && git push --tags && npm publish"
   },
   "peerDependencies": {
-    "meanie-angular-url": ">= 1.0.5"
+    "meanie-angular-url": ">= 1.1.0"
   },
   "devDependencies": {
-    "angular": "^1.4.8",
-    "angular-mocks": "^1.4.8",
+    "angular": "^1.5.0",
+    "angular-mocks": "^1.5.0",
     "gulp": "gulpjs/gulp#4.0",
     "gulp-concat": "^2.6.0",
     "gulp-filter": "^3.0.1",
-    "gulp-ng-annotate": "^1.0.0",
+    "gulp-ng-annotate": "^1.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^1.6.0",
-    "gulp-uglify": "^1.4.2",
+    "gulp-uglify": "^1.5.2",
     "gulp-wrapper": "^1.0.0",
-    "jasmine-core": "^2.3.4",
-    "jasmine-spec-reporter": "^2.2.3",
-    "jscs": "^2.8.0",
+    "jasmine-core": "^2.4.1",
+    "jasmine-spec-reporter": "^2.4.0",
+    "jscs": "^2.9.0",
     "jscs-stylish": "^0.3.1",
-    "jshint": "^2.9.1-rc2",
-    "jshint-stylish": "^2.0.1",
-    "karma": "^0.13.14",
-    "karma-jasmine": "^0.3.5",
-    "karma-phantomjs-launcher": "^0.2.1",
+    "jshint": "^2.9.1",
+    "jshint-stylish": "^2.1.0",
+    "karma": "^0.13.19",
+    "karma-jasmine": "^0.3.7",
+    "karma-phantomjs-launcher": "^1.0.0",
     "karma-spec-reporter": "^0.0.23",
-    "phantomjs": "^1.9.18"
+    "phantomjs-prebuilt": "^2.1.4"
   }
 }
