@@ -10,7 +10,7 @@ angular.module('BaseModel.Service', [])
 .factory('$baseModel', function($window, $injector) {
 
   //See if we have the moment service available to us
-  var moment;
+  let moment;
   if ($injector.has('moment')) {
     moment = $injector.get('moment');
   }
@@ -23,9 +23,9 @@ angular.module('BaseModel.Service', [])
    * Returns a moment if it is and null if it's not
    */
   function dateStringToMoment(value) {
-    var regex = /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2}).*/;
+    let regex = /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2}).*/;
     if (value.match(regex)) {
-      var date = moment(value, moment.ISO_8601, true);
+      let date = moment(value, moment.ISO_8601, true);
       if (date.isValid()) {
         return date;
       }
@@ -40,8 +40,8 @@ angular.module('BaseModel.Service', [])
     this.fromJSON(data);
   }
 
-  /*****************************************************************************
-   * Instance methods
+  /**************************************************************************
+   * Helper methods
    ***/
 
   /**
@@ -49,7 +49,7 @@ angular.module('BaseModel.Service', [])
    */
   $baseModel.prototype.fromJSON = function(json) {
     if (angular.isObject(json)) {
-      angular.forEach(json, function(value, key) {
+      angular.forEach(json, (value, key) => {
         this[key] = $baseModel.valueFromJSON(value);
       }, this);
     }
@@ -60,13 +60,13 @@ angular.module('BaseModel.Service', [])
    * To JSON converter
    */
   $baseModel.prototype.toJSON = function(data) {
-    var json = {};
+    let json = {};
     if (data && angular.isObject(data)) {
-      angular.forEach(data, function(value, key) {
+      angular.forEach(data, (value, key) => {
         json[key] = $baseModel.valueToJSON(value);
       });
     }
-    angular.forEach(this, function(value, key) {
+    angular.forEach(this, (value, key) => {
       if (!json.hasOwnProperty(key)) {
         json[key] = $baseModel.valueToJSON(value);
       }
@@ -78,9 +78,9 @@ angular.module('BaseModel.Service', [])
    * Extract a subset of data from the model
    */
   $baseModel.prototype.extract = function(properties) {
-    var obj = {};
-    var subset = (angular.isArray(properties) && properties.length);
-    angular.forEach(this, function(value, key) {
+    let obj = {};
+    let subset = (angular.isArray(properties) && properties.length);
+    angular.forEach(this, (value, key) => {
       if (!subset || properties.indexOf(key) >= 0) {
         obj[key] = angular.copy(value);
       }
@@ -93,7 +93,7 @@ angular.module('BaseModel.Service', [])
    */
   $baseModel.prototype.merge = function(data) {
     if (data && angular.isObject(data)) {
-      angular.forEach(data, function(value, key) {
+      angular.forEach(data, (value, key) => {
         this[key] = angular.copy(value);
       });
     }
@@ -103,7 +103,7 @@ angular.module('BaseModel.Service', [])
    * Clear own properties
    */
   $baseModel.prototype.clear = function() {
-    for (var key in this) {
+    for (let key in this) {
       if (this.hasOwnProperty(key)) {
         delete this[key];
       }
@@ -114,11 +114,11 @@ angular.module('BaseModel.Service', [])
    * Clone
    */
   $baseModel.prototype.clone = function() {
-    var ModelClass = this.constructor;
+    let ModelClass = this.constructor;
     return new ModelClass(this.extract());
   };
 
-  /*****************************************************************************
+  /**************************************************************************
    * Static methods
    ***/
 
@@ -130,7 +130,7 @@ angular.module('BaseModel.Service', [])
       return value.map($baseModel.valueFromJSON);
     }
     else if (moment && angular.isString(value)) {
-      var date = dateStringToMoment(value);
+      let date = dateStringToMoment(value);
       return date || value;
     }
     return angular.copy(value);
@@ -147,8 +147,8 @@ angular.module('BaseModel.Service', [])
       if (angular.isFunction(value.toJSON)) {
         return value.toJSON();
       }
-      var copy = {};
-      for (var prop in value) {
+      let copy = {};
+      for (let prop in value) {
         if (value.hasOwnProperty(prop)) {
           copy[prop] = $baseModel.valueToJSON(value[prop]);
         }

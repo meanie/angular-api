@@ -5,6 +5,7 @@
  */
 var fs = require('fs');
 var gulp = require('gulp');
+let babel = require('gulp-babel');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
@@ -98,6 +99,9 @@ function release() {
   }))
     .pipe(wrapper(angularWrapper()))
     .pipe(sourcemaps.init())
+      .pipe(babel({
+        compact: false
+      }))
       .pipe(concat(packageFileName('.js')))
       .pipe(wrapper(bannerWrapper()))
       .pipe(gulp.dest('release'))

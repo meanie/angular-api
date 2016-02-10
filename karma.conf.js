@@ -16,10 +16,18 @@ module.exports = function(config) {
       'tests/**/*.spec.js'
     ],
 
-    //Frameworks to use (see https://npmjs.org/browse/keyword/karma-adapter)
+    //Preprocessors
+    preprocessors: {
+      'src/**/*.js': ['babel'],
+      'tests/**/*.spec.js': ['babel']
+    },
+
+    //Frameworks to use
+    //See https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['jasmine'],
 
-    //Test results reporter to use (see https://npmjs.org/browse/keyword/karma-reporter)
+    //Test results reporter to use
+    //See https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['spec'],
 
     //Web server port
@@ -34,10 +42,12 @@ module.exports = function(config) {
     //Level of logging
     logLevel: config.LOG_INFO,
 
-    //Enable / disable watching file and executing tests whenever any file changes
+    //Enable / disable watching file and executing tests whenever
+    //any file changes
     autoWatch: false,
 
-    //Start these browsers (see https://npmjs.org/browse/keyword/karma-launcher)
+    //Start these browsers
+    //See https://npmjs.org/browse/keyword/karma-launcher
     browsers: ['PhantomJS'],
 
     //Continuous integration mode
