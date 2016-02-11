@@ -7,7 +7,7 @@ angular.module('BaseModel.Service', [])
 /**
  * Model definition
  */
-.factory('$baseModel', function($window, $injector) {
+.factory('$baseModel', function($window, $log, $injector) {
 
   //See if we have the moment service available to us
   let moment;
@@ -43,6 +43,43 @@ angular.module('BaseModel.Service', [])
   /**************************************************************************
    * Helper methods
    ***/
+
+  /**
+   * Parse a property
+   */
+  $baseModel.prototype.parseProperty = function(key, isArray, Model) {
+
+    //If undefined, check what we were expecting
+    if (typeof this[key] === 'undefined') {
+      if (isArray) {
+        this[key] = [];
+      }
+      else {
+        this[key] = null;
+      }
+    }
+
+    //If no model specified, we're done
+    if (!Model) {
+      return;
+    }
+
+    //String specified, use injector
+    if (typeof Model === 'string') {
+      if (!$injector.has(Model)) {
+        return $log.warn('Unknown model', Model, 'specified for sub model conversion');
+      }
+      Model = $injector.get(Model);
+    }
+
+    //Get model class and initiate
+    if (angular.isArray(this[key])) {
+      this[key] = this[key].map(data => new Model(data));
+    }
+    else {
+      this[key] = new Model(this[key]);
+    }
+  };
 
   /**
    * From JSON converter
