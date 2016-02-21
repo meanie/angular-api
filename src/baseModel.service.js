@@ -49,6 +49,12 @@ angular.module('BaseModel.Service', [])
    */
   $baseModel.prototype.convertToModel = function(key, Model, isArray) {
 
+    //Paremeter shuffling
+    if (typeof Model === 'boolean') {
+      isArray = Model;
+      Model = null;
+    }
+
     //If undefined, check what we were expecting
     if (typeof this[key] === 'undefined') {
       if (isArray) {
