@@ -45,9 +45,9 @@ angular.module('BaseModel.Service', [])
    ***/
 
   /**
-   * Parse a property
+   * Convert a property to a model
    */
-  $baseModel.prototype.parseProperty = function(key, isArray, Model) {
+  $baseModel.prototype.convertToModel = function(key, Model, isArray) {
 
     //If undefined, check what we were expecting
     if (typeof this[key] === 'undefined') {
