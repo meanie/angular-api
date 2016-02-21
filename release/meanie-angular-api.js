@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.5.0 - 12-1-2016
+ * meanie-angular-api - v1.5.1 - 21-1-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -344,9 +344,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      ***/
 
     /**
-     * Parse a property
+     * Convert a property to a model
      */
-    $baseModel.prototype.parseProperty = function (key, isArray, Model) {
+    $baseModel.prototype.convertToModel = function (key, Model, isArray) {
+
+      //Paremeter shuffling
+      if (typeof Model === 'boolean') {
+        isArray = Model;
+        Model = null;
+      }
 
       //If undefined, check what we were expecting
       if (typeof this[key] === 'undefined') {
