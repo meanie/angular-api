@@ -157,8 +157,9 @@ angular.module('Api.Request.Service', [
     //Initialize
     var request = {};
     var stripConfigKeys = [
-      'params', 'model', 'isArray', 'stripTrailingSlashes',
-      'successInterceptor', 'errorInterceptor'
+      'params', 'model', 'isArray', 'isModel',
+      'successInterceptor', 'errorInterceptor',
+      'stripTrailingSlashes'
     ];
 
     //Map action config to http request config
