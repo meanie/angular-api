@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.5.1 - 21-1-2016
+ * meanie-angular-api - v1.5.2 - 24-1-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -237,6 +237,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      */
     this.setDefaultModel = function (model) {
       this.defaults.model = model || false;
+      return this;
+    };
+
+    /**
+     * Set a generic config parameter (use only for config params that you
+     * want to pass on to the $http service)
+     */
+    this.setConfig = function (param, value) {
+      this.defaults[param] = value;
       return this;
     };
 
@@ -717,7 +726,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       //Initialize
       var request = {};
-      var stripConfigKeys = ['params', 'model', 'isArray', 'stripTrailingSlashes', 'successInterceptor', 'errorInterceptor'];
+      var stripConfigKeys = ['params', 'model', 'isArray', 'isModel', 'successInterceptor', 'errorInterceptor', 'stripTrailingSlashes'];
 
       //Map action config to http request config
       angular.forEach(action, function (value, key) {
