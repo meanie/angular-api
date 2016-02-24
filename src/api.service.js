@@ -99,6 +99,15 @@ angular.module('Api.Service', [
   };
 
   /**
+   * Set a generic config parameter (use only for config params that you
+   * want to pass on to the $http service)
+   */
+  this.setConfig = function(param, value) {
+    this.defaults[param] = value;
+    return this;
+  };
+
+  /**
    * Strip trailing slashes behaviour
    */
   this.stripTrailingSlashes = function(strip) {
