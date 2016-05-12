@@ -171,8 +171,6 @@ angular.module('Api.Request.Service', [
 
     //Append data if we have a body
     if (action.hasBody() && data && angular.isObject(data)) {
-
-      //If toJson method present, use that, otherwise convert to simple object
       if (angular.isFunction(data.toJson)) {
         request.data = data.toJson();
       }
@@ -183,6 +181,9 @@ angular.module('Api.Request.Service', [
           'Please provide a `toJSON` method on your model instead.'
         );
         request.data = data.toObject();
+      }
+      else if (angular.isArray(data)) {
+        request.data = data;
       }
       else {
         request.data = angular.extend({}, data);
