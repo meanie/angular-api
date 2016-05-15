@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.5.3 - 13-4-2016
+ * meanie-angular-api - v1.6.0 - 15-4-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -737,16 +737,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       //Append data if we have a body
       if (action.hasBody() && data && angular.isObject(data)) {
-        if (angular.isFunction(data.toJson)) {
-          request.data = data.toJson();
-        } else if (angular.isFunction(data.toObject)) {
-          //TODO: remove altogether in next major release
-          console.warn('Using `toObject` for model to JSON conversion is deprecated.\n', 'Please provide a `toJSON` method on your model instead.');
-          request.data = data.toObject();
+        if (angular.isFunction(data.toJSON)) {
+          request.data = data.toJSON();
         } else if (angular.isArray(data)) {
           request.data = data;
         } else {
           request.data = angular.extend({}, data);
+        }
+      }
+
+      //Process params
+      if (params && angular.isObject(params)) {
+        for (var key in params) {
+          if (params.hasOwnProperty(key) && angular.isObject(params[key])) {
+            if (angular.isFunction(params[key].toJSON)) {
+              params[key] = params[key].toJSON();
+            }
+          }
         }
       }
 
