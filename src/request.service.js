@@ -171,22 +171,25 @@ angular.module('Api.Request.Service', [
 
     //Append data if we have a body
     if (action.hasBody() && data && angular.isObject(data)) {
-      if (angular.isFunction(data.toJson)) {
-        request.data = data.toJson();
-      }
-      else if (angular.isFunction(data.toObject)) {
-        //TODO: remove altogether in next major release
-        console.warn(
-          'Using `toObject` for model to JSON conversion is deprecated.\n',
-          'Please provide a `toJSON` method on your model instead.'
-        );
-        request.data = data.toObject();
+      if (angular.isFunction(data.toJSON)) {
+        request.data = data.toJSON();
       }
       else if (angular.isArray(data)) {
         request.data = data;
       }
       else {
         request.data = angular.extend({}, data);
+      }
+    }
+
+    //Process params
+    if (params && angular.isObject(params)) {
+      for (let key in params) {
+        if (params.hasOwnProperty(key) && angular.isObject(params[key])) {
+          if (angular.isFunction(params[key].toJSON)) {
+            params[key] = params[key].toJSON();
+          }
+        }
       }
     }
 
