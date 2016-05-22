@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.6.0 - 15-4-2016
+ * meanie-angular-api - v1.6.1 - 22-4-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -431,13 +431,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * Extract a subset of data from the model
      */
     $baseModel.prototype.extract = function (properties) {
+      var _this2 = this;
+
+      //Initialize object
       var obj = {};
-      var subset = angular.isArray(properties) && properties.length;
-      angular.forEach(this, function (value, key) {
-        if (!subset || properties.indexOf(key) >= 0) {
+
+      //No properties given? Iterate all object properties
+      if (!angular.isArray(properties) || !properties.length) {
+        angular.forEach(this, function (value, key) {
           obj[key] = angular.copy(value);
-        }
-      });
+        });
+      } else {
+        angular.forEach(properties, function (key) {
+          obj[key] = angular.copy(_this2[key]);
+        });
+      }
+
+      //Return resulting object
       return obj;
     };
 
@@ -445,11 +455,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * Merge a set of data into the model
      */
     $baseModel.prototype.merge = function (data) {
-      var _this2 = this;
+      var _this3 = this;
 
       if (data && angular.isObject(data)) {
         angular.forEach(data, function (value, key) {
-          _this2[key] = angular.copy(value);
+          _this3[key] = angular.copy(value);
         });
       }
     };
