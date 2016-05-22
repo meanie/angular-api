@@ -121,13 +121,23 @@ angular.module('BaseModel.Service', [])
    * Extract a subset of data from the model
    */
   $baseModel.prototype.extract = function(properties) {
+
+    //Initialize object
     let obj = {};
-    let subset = (angular.isArray(properties) && properties.length);
-    angular.forEach(this, (value, key) => {
-      if (!subset || properties.indexOf(key) >= 0) {
+
+    //No properties given? Iterate all object properties
+    if (!angular.isArray(properties) || !properties.length) {
+      angular.forEach(this, (value, key) => {
         obj[key] = angular.copy(value);
-      }
-    });
+      });
+    }
+    else {
+      angular.forEach(properties, key => {
+        obj[key] = angular.copy(this[key]);
+      });
+    }
+
+    //Return resulting object
     return obj;
   };
 
