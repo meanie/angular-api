@@ -128,12 +128,22 @@ angular.module('BaseModel.Service', [])
     //No properties given? Iterate all object properties
     if (!angular.isArray(properties) || !properties.length) {
       angular.forEach(this, (value, key) => {
-        obj[key] = angular.copy(value);
+        if (value && typeof value.clone === 'function') {
+          obj[key] = value.clone();
+        }
+        else {
+          obj[key] = angular.copy(value);
+        }
       });
     }
     else {
       angular.forEach(properties, key => {
-        obj[key] = angular.copy(this[key]);
+        if (this[key] && typeof this[key].clone === 'function') {
+          obj[key] = this[key].clone();
+        }
+        else {
+          obj[key] = angular.copy(this[key]);
+        }
       });
     }
 
