@@ -157,7 +157,12 @@ angular.module('BaseModel.Service', [])
   $baseModel.prototype.merge = function(data) {
     if (data && angular.isObject(data)) {
       angular.forEach(data, (value, key) => {
-        this[key] = angular.copy(value);
+        if (value && typeof value.clone === 'function') {
+          this[key] = value.clone();
+        }
+        else {
+          this[key] = angular.copy(value);
+        }
       });
     }
   };
