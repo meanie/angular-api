@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.6.1 - 22-4-2016
+ * meanie-angular-api - v1.7.0 - 5-5-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -439,11 +439,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       //No properties given? Iterate all object properties
       if (!angular.isArray(properties) || !properties.length) {
         angular.forEach(this, function (value, key) {
-          obj[key] = angular.copy(value);
+          if (value && typeof value.clone === 'function') {
+            obj[key] = value.clone();
+          } else {
+            obj[key] = angular.copy(value);
+          }
         });
       } else {
         angular.forEach(properties, function (key) {
-          obj[key] = angular.copy(_this2[key]);
+          if (_this2[key] && typeof _this2[key].clone === 'function') {
+            obj[key] = _this2[key].clone();
+          } else {
+            obj[key] = angular.copy(_this2[key]);
+          }
         });
       }
 
@@ -459,7 +467,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       if (data && angular.isObject(data)) {
         angular.forEach(data, function (value, key) {
-          _this3[key] = angular.copy(value);
+          if (value && typeof value.clone === 'function') {
+            _this3[key] = value.clone();
+          } else {
+            _this3[key] = angular.copy(value);
+          }
         });
       }
     };
