@@ -34,6 +34,20 @@ angular.module('BaseModel.Service', [])
   }
 
   /**
+   * Copy a property
+   */
+  function copyProperty(obj, key) {
+    if (angular.isArray(obj[key])) {
+      let arr = obj[key];
+      return arr.map((value, key) => copyProperty(arr, key));
+    }
+    if (obj[key] && angular.isFunction(obj[key].clone)) {
+      return obj[key].clone();
+    }
+    return angular.copy(obj[key]);
+  }
+
+  /**
    * Constructor
    */
   function $baseModel(data) {
@@ -73,7 +87,9 @@ angular.module('BaseModel.Service', [])
     //String specified, use injector
     if (typeof Model === 'string') {
       if (!$injector.has(Model)) {
-        return $log.warn('Unknown model', Model, 'specified for sub model conversion');
+        return $log.warn(
+          'Unknown model', Model, 'specified for sub model conversion'
+        );
       }
       Model = $injector.get(Model);
     }
@@ -128,22 +144,12 @@ angular.module('BaseModel.Service', [])
     //No properties given? Iterate all object properties
     if (!angular.isArray(properties) || !properties.length) {
       angular.forEach(this, (value, key) => {
-        if (value && typeof value.clone === 'function') {
-          obj[key] = value.clone();
-        }
-        else {
-          obj[key] = angular.copy(value);
-        }
+        obj[key] = copyProperty(this, key);
       });
     }
     else {
       angular.forEach(properties, key => {
-        if (this[key] && typeof this[key].clone === 'function') {
-          obj[key] = this[key].clone();
-        }
-        else {
-          obj[key] = angular.copy(this[key]);
-        }
+        obj[key] = copyProperty(this, key);
       });
     }
 
@@ -157,12 +163,7 @@ angular.module('BaseModel.Service', [])
   $baseModel.prototype.merge = function(data) {
     if (data && angular.isObject(data)) {
       angular.forEach(data, (value, key) => {
-        if (value && typeof value.clone === 'function') {
-          this[key] = value.clone();
-        }
-        else {
-          this[key] = angular.copy(value);
-        }
+        this[key] = copyProperty(data, key);
       });
     }
   };
@@ -184,6 +185,21 @@ angular.module('BaseModel.Service', [])
   $baseModel.prototype.clone = function() {
     let ModelClass = this.constructor;
     return new ModelClass(this.extract());
+  };
+
+  /**
+   * Copy a property
+   */
+  $baseModel.prototype.copyProperty = function(obj, key) {
+    if (angular.isArray(this[key])) {
+
+    }
+    if (this[key] && angular.isFunction(this[key].clone)) {
+      obj[key] = this[key].clone();
+    }
+    else {
+      obj[key] = angular.copy(this[key]);
+    }
   };
 
   /**************************************************************************
