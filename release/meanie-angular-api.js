@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.7.0 - 5-5-2016
+ * meanie-angular-api - v1.7.1 - 6-5-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -342,6 +342,28 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
 
     /**
+     * Copy a property
+     */
+    function copyProperty(obj, key) {
+      if (angular.isArray(obj[key])) {
+        var _ret = function () {
+          var arr = obj[key];
+          return {
+            v: arr.map(function (value, key) {
+              return copyProperty(arr, key);
+            })
+          };
+        }();
+
+        if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+      }
+      if (obj[key] && angular.isFunction(obj[key].clone)) {
+        return obj[key].clone();
+      }
+      return angular.copy(obj[key]);
+    }
+
+    /**
      * Constructor
      */
     function $baseModel(data) {
@@ -439,19 +461,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       //No properties given? Iterate all object properties
       if (!angular.isArray(properties) || !properties.length) {
         angular.forEach(this, function (value, key) {
-          if (value && typeof value.clone === 'function') {
-            obj[key] = value.clone();
-          } else {
-            obj[key] = angular.copy(value);
-          }
+          obj[key] = copyProperty(_this2, key);
         });
       } else {
         angular.forEach(properties, function (key) {
-          if (_this2[key] && typeof _this2[key].clone === 'function') {
-            obj[key] = _this2[key].clone();
-          } else {
-            obj[key] = angular.copy(_this2[key]);
-          }
+          obj[key] = copyProperty(_this2, key);
         });
       }
 
@@ -467,11 +481,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       if (data && angular.isObject(data)) {
         angular.forEach(data, function (value, key) {
-          if (value && typeof value.clone === 'function') {
-            _this3[key] = value.clone();
-          } else {
-            _this3[key] = angular.copy(value);
-          }
+          _this3[key] = copyProperty(data, key);
         });
       }
     };
@@ -493,6 +503,18 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     $baseModel.prototype.clone = function () {
       var ModelClass = this.constructor;
       return new ModelClass(this.extract());
+    };
+
+    /**
+     * Copy a property
+     */
+    $baseModel.prototype.copyProperty = function (obj, key) {
+      if (angular.isArray(this[key])) {}
+      if (this[key] && angular.isFunction(this[key].clone)) {
+        obj[key] = this[key].clone();
+      } else {
+        obj[key] = angular.copy(this[key]);
+      }
     };
 
     /**************************************************************************
