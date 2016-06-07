@@ -61,7 +61,9 @@ angular.module('BaseModel.Service', [])
   /**
    * Convert a property to a model
    */
-  $baseModel.prototype.convertToModel = function(key, Model, isArray) {
+  $baseModel.prototype.convertToModel = function(
+    key, Model, isArray, allowEmpty
+  ) {
 
     //Paremeter shuffling
     if (typeof Model === 'boolean') {
@@ -81,6 +83,11 @@ angular.module('BaseModel.Service', [])
 
     //If no model specified, we're done
     if (!Model) {
+      return;
+    }
+
+    //Empty and allowed empty?
+    if (!this[key] && allowEmpty) {
       return;
     }
 
