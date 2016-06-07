@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.7.1 - 6-5-2016
+ * meanie-angular-api - v1.8.0 - 7-5-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -377,7 +377,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     /**
      * Convert a property to a model
      */
-    $baseModel.prototype.convertToModel = function (key, Model, isArray) {
+    $baseModel.prototype.convertToModel = function (key, Model, isArray, allowEmpty) {
 
       //Paremeter shuffling
       if (typeof Model === 'boolean') {
@@ -396,6 +396,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       //If no model specified, we're done
       if (!Model) {
+        return;
+      }
+
+      //Empty and allowed empty?
+      if (!this[key] && allowEmpty) {
         return;
       }
 
