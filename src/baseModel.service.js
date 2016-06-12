@@ -189,9 +189,13 @@ angular.module('BaseModel.Service', [])
   /**
    * Clone
    */
-  $baseModel.prototype.clone = function() {
+  $baseModel.prototype.clone = function(keepId) {
     let ModelClass = this.constructor;
-    return new ModelClass(this.extract());
+    let clone = new ModelClass(this.extract());
+    if (clone.id && !keepId) {
+      delete clone.id;
+    }
+    return clone;
   };
 
   /**
