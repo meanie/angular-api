@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.9.0 - 12-5-2016
+ * meanie-angular-api - v1.9.1 - 14-5-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -505,10 +505,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     /**
      * Clone
      */
-    $baseModel.prototype.clone = function (keepId) {
+    $baseModel.prototype.clone = function (stripId) {
       var ModelClass = this.constructor;
       var clone = new ModelClass(this.extract());
-      if (clone.id && !keepId) {
+      if (clone.id && stripId) {
         delete clone.id;
       }
       return clone;
