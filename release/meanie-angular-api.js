@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.9.1 - 14-5-2016
+ * meanie-angular-api - v1.10.0 - 16-5-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -417,6 +417,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         this[key] = this[key].map(function (data) {
           return new Model(data);
         });
+      } else if (angular.isString(this[key]) && $baseModel.isId(this[key])) {
+        this[key] = new Model({ id: this[key] });
       } else {
         this[key] = new Model(this[key]);
       }
@@ -575,6 +577,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return obj;
       }
       return obj.id;
+    };
+
+    /**
+     * Test for MongoDB object ID
+     */
+    $baseModel.isId = function (str) {
+      return str.match(/^[a-f\d]{24}$/i);
     };
 
     //Return
