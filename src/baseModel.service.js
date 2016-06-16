@@ -105,6 +105,9 @@ angular.module('BaseModel.Service', [])
     if (angular.isArray(this[key])) {
       this[key] = this[key].map(data => new Model(data));
     }
+    else if (angular.isString(this[key]) && $baseModel.isId(this[key])) {
+      this[key] = new Model({id: this[key]});
+    }
     else {
       this[key] = new Model(this[key]);
     }
@@ -264,6 +267,13 @@ angular.module('BaseModel.Service', [])
       return obj;
     }
     return obj.id;
+  };
+
+  /**
+   * Test for MongoDB object ID
+   */
+  $baseModel.isId = function(str) {
+    return str.match(/^[a-f\d]{24}$/i);
   };
 
   //Return
