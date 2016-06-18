@@ -205,9 +205,6 @@ angular.module('BaseModel.Service', [])
    * Copy a property
    */
   $baseModel.prototype.copyProperty = function(obj, key) {
-    if (angular.isArray(this[key])) {
-
-    }
     if (this[key] && angular.isFunction(this[key].clone)) {
       obj[key] = this[key].clone();
     }
