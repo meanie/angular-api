@@ -12,9 +12,7 @@ An Angular service for interaction with API's
 
 ## Installation
 
-You can install this package using `npm` or `bower`.
-
-### npm
+You can install this package using `npm`.
 
 ```shell
 npm install meanie-angular-api --save
@@ -24,20 +22,6 @@ Include the script `node_modules/meanie-angular-api/release/meanie-angular-api.j
 
 ```html
 <script src="node_modules/meanie-angular-api/release/meanie-angular-api.js"></script>
-```
-
-Add `Api.Service` as a dependency for your app.
-
-### bower
-
-```shell
-bower install meanie-angular-api
-```
-
-Include the script `bower_components/meanie-angular-api/release/meanie-angular-api.js` in your build process, or add it via a `<script>` tag to your `index.html`:
-
-```html
-<script src="bower_components/meanie-angular-api/release/meanie-angular-api.js"></script>
 ```
 
 Add `Api.Service` as a dependency for your app.

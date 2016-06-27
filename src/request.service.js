@@ -16,7 +16,8 @@ angular.module('Api.Request.Service', [
    */
   function isValidDottedPath(path) {
     return (
-      path && path !== 'hasOwnProperty' && /^(\.[a-zA-Z_$@][0-9a-zA-Z_$@]*)+$/.test('.' + path)
+      path && path !== 'hasOwnProperty' &&
+      /^(\.[a-zA-Z_$@][0-9a-zA-Z_$@]*)+$/.test('.' + path)
     );
   }
 
@@ -31,9 +32,9 @@ angular.module('Api.Request.Service', [
     }
 
     //Split path in object keys to traverse
-    var keys = path.split('.');
-    for (var i = 0; i < keys.length && obj !== undefined; i++) {
-      var key = keys[i];
+    let keys = path.split('.');
+    for (let i = 0; i < keys.length && obj !== undefined; i++) {
+      let key = keys[i];
       obj = (obj !== null) ? obj[key] : undefined;
     }
 
@@ -47,8 +48,8 @@ angular.module('Api.Request.Service', [
   function combineParams(actionParams, givenParams, data) {
 
     //Extract data params from action params
-    var extractedParams = {};
-    angular.forEach(actionParams || {}, function(value, key) {
+    let extractedParams = {};
+    angular.forEach(actionParams || {}, (value, key) => {
 
       //Function? Call now
       if (angular.isFunction(value)) {
@@ -72,8 +73,8 @@ angular.module('Api.Request.Service', [
    * Find URL params
    */
   function findUrlParams(url) {
-    var urlParams = {};
-    angular.forEach(url.split(/\W/), function(param) {
+    let urlParams = {};
+    angular.forEach(url.split(/\W/), param => {
 
       //Filter hasOwnProperty
       if (param === 'hasOwnProperty') {
@@ -100,8 +101,9 @@ angular.module('Api.Request.Service', [
       url = url.replace(/\/+$/, '') || '/';
     }
 
-    //Replace collapsed `/.` if found in the last URL path segment before the query
-    //E.g. `http://url.com/id./format?q=x` becomes `http://url.com/id.format?q=x`
+    //Replace collapsed `/.` if found in the last URL path segment before
+    //the query, e.g. `http://url.com/id./format?q=x` becomes
+    //`http://url.com/id.format?q=x`
     return url
       .replace(/\/\.(?=\w+($|\?))/, '.')
       .replace(/\/\\\./, '/.');
@@ -116,17 +118,17 @@ angular.module('Api.Request.Service', [
     url = url.replace(/\\:/g, ':');
 
     //Loop the valid URL params now
-    angular.forEach(urlParams, function(t, urlParam) {
+    angular.forEach(urlParams, (t, urlParam) => {
 
       //Extract value for this url param from given params
-      var val = params.hasOwnProperty(urlParam) ? params[urlParam] : null;
-      var regex;
+      let val = params.hasOwnProperty(urlParam) ? params[urlParam] : null;
+      let regex;
 
       //If defined and not null, encode it and replace in URL
       if (angular.isDefined(val) && val !== null) {
-        var encodedVal = $url.encodeUriSegment(val);
+        let encodedVal = $url.encodeUriSegment(val);
         regex = new RegExp(':' + urlParam + '(\\W|$)', 'g');
-        url = url.replace(regex, function(match, tail) {
+        url = url.replace(regex, (match, tail) => {
           return encodedVal + tail;
         });
       }
@@ -134,7 +136,7 @@ angular.module('Api.Request.Service', [
       //Otherwise, remove from URL
       else {
         regex = new RegExp('(\/?):' + urlParam + '(\\W|$)', 'g');
-        url = url.replace(regex, function(match, leadingSlashes, tail) {
+        url = url.replace(regex, (match, leadingSlashes, tail) => {
           if (tail.charAt(0) === '/') {
             return tail;
           }
@@ -155,15 +157,15 @@ angular.module('Api.Request.Service', [
   function createRequestConfig(action, params, data) {
 
     //Initialize
-    var request = {};
-    var stripConfigKeys = [
+    let request = {};
+    let stripConfigKeys = [
       'params', 'model', 'isArray', 'isModel',
       'successInterceptor', 'errorInterceptor',
       'stripTrailingSlashes'
     ];
 
     //Map action config to http request config
-    angular.forEach(action, function(value, key) {
+    angular.forEach(action, (value, key) => {
       if (stripConfigKeys.indexOf(key) === -1) {
         request[key] = angular.copy(value);
       }
@@ -195,13 +197,15 @@ angular.module('Api.Request.Service', [
 
     //Combine params out of given params and data and find URL params
     params = combineParams(action.params, params, data);
-    var urlParams = findUrlParams(request.url);
+    let urlParams = findUrlParams(request.url);
 
     //Parse URL
-    request.url = parseUrl(action.url, params, urlParams, action.stripTrailingSlashes);
+    request.url = parseUrl(
+      action.url, params, urlParams, action.stripTrailingSlashes);
 
-    //Set remaining given non-url params as query params, delegate param encoding to $http
-    angular.forEach(params, function(value, key) {
+    //Set remaining given non-url params as query params,
+    //delegate param encoding to $http
+    angular.forEach(params, (value, key) => {
       if (!urlParams[key]) {
         request.params = request.params || {};
         request.params[key] = value;
@@ -223,15 +227,16 @@ angular.module('Api.Request.Service', [
       params = null;
     }
 
-    //Create request config and use $http to do the request and intercept the response
-    var request = createRequestConfig(action, params, data);
-    var promise = $http(request).then(
+    //Create request config and use $http to do the request
+    //and intercept the response
+    let request = createRequestConfig(action, params, data);
+    let promise = $http(request).then(
       action.successInterceptor.bind(action),
       action.errorInterceptor.bind(action)
     );
 
     //Then handle the raw data
-    return promise.then(function(raw) {
+    return promise.then(raw => {
       if (action.expectsModel()) {
         return action.convertToModel(raw);
       }

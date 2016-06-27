@@ -3,21 +3,21 @@
 /**
  * Dependencies
  */
-var fs = require('fs');
-var gulp = require('gulp');
+let fs = require('fs');
+let gulp = require('gulp');
 let babel = require('gulp-babel');
-var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
-var rename = require('gulp-rename');
-var filter = require('gulp-filter');
-var wrapper = require('gulp-wrapper');
-var sourcemaps = require('gulp-sourcemaps');
-var ngAnnotate = require('gulp-ng-annotate');
+let concat = require('gulp-concat');
+let uglify = require('gulp-uglify');
+let rename = require('gulp-rename');
+let filter = require('gulp-filter');
+let wrapper = require('gulp-wrapper');
+let sourcemaps = require('gulp-sourcemaps');
+let ngAnnotate = require('gulp-ng-annotate');
 
 /**
  * Package and configuration
  */
-var pkg = require('./package.json');
+let pkg = require('./package.json');
 
 /*****************************************************************************
  * Helpers
@@ -60,12 +60,14 @@ function bannerWrapper() {
   packageJson();
 
   //Get date and author
-  var today = new Date();
-  var date = today.getDate() + '-' + today.getMonth() + '-' + today.getFullYear();
-  var author = pkg.author.name + ' <' + pkg.author.email + '>';
+  let today = new Date();
+  let author = pkg.author.name + ' <' + pkg.author.email + '>';
+  let date = today.getDate() + '-' +
+             today.getMonth() + '-' +
+             today.getFullYear();
 
   //Format banner
-  var banner =
+  let banner =
     '/**\n' +
     ' * ' + pkg.name + ' - v' + pkg.version + ' - ' + date + '\n' +
     ' * ' + pkg.homepage + '\n' +
@@ -89,18 +91,19 @@ function bannerWrapper() {
  * Build release files
  */
 function release() {
-  var jsFilter = filter(['*.js'], {
+  let jsFilter = filter(['*.js'], {
     restore: true
   });
   return gulp.src([
     'src/**/*.js'
-  ]).pipe(ngAnnotate({
-    single_quotes: true
-  }))
+  ])
     .pipe(wrapper(angularWrapper()))
     .pipe(sourcemaps.init())
       .pipe(babel({
         compact: false
+      }))
+      .pipe(ngAnnotate({
+        single_quotes: true
       }))
       .pipe(concat(packageFileName('.js')))
       .pipe(wrapper(bannerWrapper()))

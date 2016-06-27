@@ -131,12 +131,12 @@ angular.module('Api.Service', [
   this.$get = function($log, $apiEndpoint) {
 
     //Initialize API interface
-    var Api = function(endpoint) {
+    let Api = function(endpoint) {
       return this[endpoint];
     };
 
     //Append all endpoints
-    angular.forEach(this.endpoints, function(config, name) {
+    angular.forEach(this.endpoints, (config, name) => {
 
       //Warn if overwriting
       if (Api[name]) {
@@ -151,7 +151,7 @@ angular.module('Api.Service', [
 
       //Initialize endpoint
       Api[name] = $apiEndpoint(name, config);
-    }, this);
+    });
 
     //Return
     return Api;

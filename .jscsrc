@@ -8,7 +8,10 @@
   ],
   "requireParenthesesAroundIIFE": true,
   "requireCamelCaseOrUpperCaseIdentifiers": "ignoreProperties",
-  "maximumLineLength": 100,
+  "maximumLineLength": {
+    "value": 80,
+    "allExcept": ["regex", "urlComments"]
+  },
   "validateLineBreaks": "LF",
   "validateIndentation": 2,
   "disallowTrailingComma": true,
@@ -17,5 +20,5 @@
   "disallowKeywordsOnNewLine": null,
   "disallowSpacesInsideObjectBrackets": null,
   "disallowImplicitTypeConversion": ["string"],
-  "safeContextKeyword": "self"
+  "safeContextKeyword": ["self", "$ctrl"]
 }

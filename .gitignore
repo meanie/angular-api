@@ -1,5 +1,3 @@
 .DS_Store
-Thumbs.db
-*.sublime-*
 *.log
 node_modules

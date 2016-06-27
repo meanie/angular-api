@@ -78,11 +78,11 @@ angular.module('Api.Action.Service', [
 
     //Array given?
     if (angular.isArray(data)) {
-      return data.map(this.convertToModel.bind(this));
+      return data.map(data => this.convertToModel(data));
     }
 
     //Get model class and return model instance
-    var Model = $injector.get(this.model);
+    let Model = $injector.get(this.model);
     return new Model(data);
   };
 
@@ -92,8 +92,8 @@ angular.module('Api.Action.Service', [
   ApiAction.prototype.successInterceptor = function(response) {
 
     //Check if we expect an array
-    var expectsArray = this.expectsArray();
-    var isArray = angular.isArray(response.data);
+    let expectsArray = this.expectsArray();
+    let isArray = angular.isArray(response.data);
 
     //Validate data type
     if (isArray !== expectsArray) {
