@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.10.0 - 16-5-2016
+ * meanie-angular-api - v1.11.0 - 27-5-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -88,10 +88,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * Convert raw response data to a model
      */
     ApiAction.prototype.convertToModel = function (data) {
+      var _this = this;
 
       //Array given?
       if (angular.isArray(data)) {
-        return data.map(this.convertToModel.bind(this));
+        return data.map(function (data) {
+          return _this.convertToModel(data);
+        });
       }
 
       //Get model class and return model instance
@@ -271,6 +274,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * Service getter
      */
     this.$get = ['$log', '$apiEndpoint', function ($log, $apiEndpoint) {
+      var _this = this;
 
       //Initialize API interface
       var Api = function Api(endpoint) {
@@ -286,14 +290,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
 
         //Extend endpoint config with defaults
-        config = angular.extend({}, this.defaults, config);
+        config = angular.extend({}, _this.defaults, config);
         if (config.verbose) {
           $log.info('API endpoint', name + ':', config);
         }
 
         //Initialize endpoint
         Api[name] = $apiEndpoint(name, config);
-      }, this);
+      });
 
       //Return
       return Api;
@@ -520,7 +524,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * Copy a property
      */
     $baseModel.prototype.copyProperty = function (obj, key) {
-      if (angular.isArray(this[key])) {}
       if (this[key] && angular.isFunction(this[key].clone)) {
         obj[key] = this[key].clone();
       } else {
@@ -610,10 +613,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * Constructor
      */
     function ApiEndpoint(name, config) {
+      var _this = this;
 
       //Determine full URL of endpoint
-      config.url = $url.concat(config.baseUrl, config.url || $url.concat(name, ':id'));
       config.actions = config.actions || {};
+      config.url = $url.concat(config.baseUrl, config.url || $url.concat(name, ':id'));
 
       //Expose config and actions container
       this.$config = config;
@@ -621,9 +625,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       //Create action instances and bind request method to action key on endpoint
       angular.forEach(config.actions, function (action, key) {
-        this.$actions[key] = $apiAction(action || {}, config);
-        this[key] = angular.bind(this, $apiRequest, this.$actions[key]);
-      }, this);
+        _this.$actions[key] = $apiAction(action || {}, config);
+        _this[key] = angular.bind(_this, $apiRequest, _this.$actions[key]);
+      });
     }
 
     //Return factory function
@@ -735,8 +739,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         url = url.replace(/\/+$/, '') || '/';
       }
 
-      //Replace collapsed `/.` if found in the last URL path segment before the query
-      //E.g. `http://url.com/id./format?q=x` becomes `http://url.com/id.format?q=x`
+      //Replace collapsed `/.` if found in the last URL path segment before
+      //the query, e.g. `http://url.com/id./format?q=x` becomes
+      //`http://url.com/id.format?q=x`
       return url.replace(/\/\.(?=\w+($|\?))/, '.').replace(/\/\\\./, '/.');
     }
 
@@ -753,15 +758,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         //Extract value for this url param from given params
         var val = params.hasOwnProperty(urlParam) ? params[urlParam] : null;
-        var regex;
+        var regex = void 0;
 
         //If defined and not null, encode it and replace in URL
         if (angular.isDefined(val) && val !== null) {
-          var encodedVal = $url.encodeUriSegment(val);
-          regex = new RegExp(':' + urlParam + '(\\W|$)', 'g');
-          url = url.replace(regex, function (match, tail) {
-            return encodedVal + tail;
-          });
+          (function () {
+            var encodedVal = $url.encodeUriSegment(val);
+            regex = new RegExp(':' + urlParam + '(\\W|$)', 'g');
+            url = url.replace(regex, function (match, tail) {
+              return encodedVal + tail;
+            });
+          })();
         }
 
         //Otherwise, remove from URL
@@ -826,7 +833,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       //Parse URL
       request.url = parseUrl(action.url, params, urlParams, action.stripTrailingSlashes);
 
-      //Set remaining given non-url params as query params, delegate param encoding to $http
+      //Set remaining given non-url params as query params,
+      //delegate param encoding to $http
       angular.forEach(params, function (value, key) {
         if (!urlParams[key]) {
           request.params = request.params || {};
@@ -849,7 +857,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         params = null;
       }
 
-      //Create request config and use $http to do the request and intercept the response
+      //Create request config and use $http to do the request
+      //and intercept the response
       var request = createRequestConfig(action, params, data);
       var promise = $http(request).then(action.successInterceptor.bind(action), action.errorInterceptor.bind(action));
 
