@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.11.0 - 27-5-2016
+ * meanie-angular-api - v1.11.1 - 30-5-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -54,9 +54,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       //Set full action url, model and method
       this.url = $url.concat(endpoint.url, this.url || '');
       this.model = this.model || endpoint.model || false;
-      this.params = this.params || endpoint.params || {};
       this.method = this.method || 'GET';
       this.enforceDataFormat = endpoint.enforceDataFormat || false;
+
+      //Determine params
+      if (typeof this.params === 'undefined') {
+        this.params = endpoint.params;
+      }
+
+      //Normalize
+      this.params = this.params || {};
 
       //Validate model
       this.model = validatedModel(this.model);
@@ -74,14 +81,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * Expects array check
      */
     ApiAction.prototype.expectsArray = function () {
-      return !!this.isArray;
+      return Boolean(this.isArray);
     };
 
     /**
      * Expects model check
      */
     ApiAction.prototype.expectsModel = function () {
-      return this.model && !!this.isModel;
+      return this.model && Boolean(this.isModel);
     };
 
     /**
