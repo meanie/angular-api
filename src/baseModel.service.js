@@ -267,6 +267,24 @@ angular.module('BaseModel.Service', [])
   };
 
   /**
+   * Strip a given object to specific keys
+   */
+  $baseModel.strip = function(obj, ...keys) {
+    if (angular.isArray(obj)) {
+      return obj.map(obj => $baseModel.strip(obj, ...keys));
+    }
+    if (!obj || typeof obj !== 'object') {
+      return obj;
+    }
+    angular.forEach(obj, (value, key) => {
+      if (!keys.includes(key)) {
+        delete obj[key];
+      }
+    });
+    return obj;
+  };
+
+  /**
    * Test for MongoDB object ID
    */
   $baseModel.isId = function(str) {
