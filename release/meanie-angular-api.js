@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.11.1 - 30-5-2016
+ * meanie-angular-api - v1.12.0 - 8-6-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -587,6 +587,30 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return obj;
       }
       return obj.id;
+    };
+
+    /**
+     * Strip a given object to specific keys
+     */
+    $baseModel.strip = function (obj) {
+      for (var _len = arguments.length, keys = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        keys[_key - 1] = arguments[_key];
+      }
+
+      if (angular.isArray(obj)) {
+        return obj.map(function (obj) {
+          return $baseModel.strip.apply($baseModel, [obj].concat(keys));
+        });
+      }
+      if (!obj || (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) !== 'object') {
+        return obj;
+      }
+      angular.forEach(obj, function (value, key) {
+        if (!keys.includes(key)) {
+          delete obj[key];
+        }
+      });
+      return obj;
     };
 
     /**
