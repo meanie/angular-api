@@ -51,8 +51,8 @@ angular.module('BaseModel.Service', [])
    * Constructor
    */
   function $baseModel(data, parent) {
-    this.$parent = parent;
     this.fromJSON(data);
+    this.setParent(parent);
   }
 
   /**************************************************************************
@@ -207,6 +207,13 @@ angular.module('BaseModel.Service', [])
     else {
       obj[key] = angular.copy(this[key]);
     }
+  };
+
+  /**
+   * Set parent
+   */
+  $baseModel.prototype.setParent = function(parent) {
+    this.$parent = parent;
   };
 
   /**************************************************************************
