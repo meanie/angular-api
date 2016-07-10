@@ -50,7 +50,8 @@ angular.module('BaseModel.Service', [])
   /**
    * Constructor
    */
-  function $baseModel(data) {
+  function $baseModel(data, parent) {
+    this.$parent = parent;
     this.fromJSON(data);
   }
 
@@ -62,7 +63,7 @@ angular.module('BaseModel.Service', [])
    * Convert a property to a model
    */
   $baseModel.prototype.convertToModel = function(
-    key, Model, isArray, allowEmpty
+    key, Model, isArray
   ) {
 
     //Paremeter shuffling
@@ -81,13 +82,8 @@ angular.module('BaseModel.Service', [])
       }
     }
 
-    //If no model specified, we're done
-    if (!Model) {
-      return;
-    }
-
-    //Empty and allowed empty?
-    if (!this[key] && allowEmpty) {
+    //If no model specified or if empty, we're done
+    if (!Model || !this[key]) {
       return;
     }
 
@@ -103,13 +99,13 @@ angular.module('BaseModel.Service', [])
 
     //Get model class and initiate
     if (angular.isArray(this[key])) {
-      this[key] = this[key].map(data => new Model(data));
+      this[key] = this[key].map(data => new Model(data, this));
     }
     else if (angular.isString(this[key]) && $baseModel.isId(this[key])) {
-      this[key] = new Model({id: this[key]});
+      this[key] = new Model({id: this[key]}, this);
     }
     else {
-      this[key] = new Model(this[key]);
+      this[key] = new Model(this[key], this);
     }
   };
 
