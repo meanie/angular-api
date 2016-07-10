@@ -51,8 +51,15 @@ angular.module('BaseModel.Service', [])
    * Constructor
    */
   function $baseModel(data, parent) {
+
+    //Define parent property
+    Object.defineProperty(this, '$parent', {
+      enumerable: false,
+      value: parent,
+    });
+
+    //Load data
     this.fromJSON(data);
-    this.setParent(parent);
   }
 
   /**************************************************************************
@@ -190,7 +197,7 @@ angular.module('BaseModel.Service', [])
    */
   $baseModel.prototype.clone = function(stripId) {
     let ModelClass = this.constructor;
-    let clone = new ModelClass(this.extract());
+    let clone = new ModelClass(this.extract(), this.$parent);
     if (clone.id && stripId) {
       delete clone.id;
     }
