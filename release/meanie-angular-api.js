@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.13.1 - 10-6-2016
+ * meanie-angular-api - v1.13.2 - 10-6-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -378,8 +378,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * Constructor
      */
     function $baseModel(data, parent) {
+
+      //Define parent property
+      Object.defineProperty(this, '$parent', {
+        enumerable: false,
+        value: parent
+      });
+
+      //Load data
       this.fromJSON(data);
-      this.setParent(parent);
     }
 
     /**************************************************************************
@@ -517,7 +524,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      */
     $baseModel.prototype.clone = function (stripId) {
       var ModelClass = this.constructor;
-      var clone = new ModelClass(this.extract());
+      var clone = new ModelClass(this.extract(), this.$parent);
       if (clone.id && stripId) {
         delete clone.id;
       }
