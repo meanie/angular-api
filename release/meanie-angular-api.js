@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.13.0 - 10-6-2016
+ * meanie-angular-api - v1.13.1 - 10-6-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -378,8 +378,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * Constructor
      */
     function $baseModel(data, parent) {
-      this.$parent = parent;
       this.fromJSON(data);
+      this.setParent(parent);
     }
 
     /**************************************************************************
@@ -533,6 +533,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       } else {
         obj[key] = angular.copy(this[key]);
       }
+    };
+
+    /**
+     * Set parent
+     */
+    $baseModel.prototype.setParent = function (parent) {
+      this.$parent = parent;
     };
 
     /**************************************************************************
