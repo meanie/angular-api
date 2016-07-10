@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.12.0 - 8-6-2016
+ * meanie-angular-api - v1.13.0 - 10-6-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -377,7 +377,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     /**
      * Constructor
      */
-    function $baseModel(data) {
+    function $baseModel(data, parent) {
+      this.$parent = parent;
       this.fromJSON(data);
     }
 
@@ -388,7 +389,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     /**
      * Convert a property to a model
      */
-    $baseModel.prototype.convertToModel = function (key, Model, isArray, allowEmpty) {
+    $baseModel.prototype.convertToModel = function (key, Model, isArray) {
+      var _this = this;
 
       //Paremeter shuffling
       if (typeof Model === 'boolean') {
@@ -405,13 +407,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
       }
 
-      //If no model specified, we're done
-      if (!Model) {
-        return;
-      }
-
-      //Empty and allowed empty?
-      if (!this[key] && allowEmpty) {
+      //If no model specified or if empty, we're done
+      if (!Model || !this[key]) {
         return;
       }
 
@@ -426,12 +423,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       //Get model class and initiate
       if (angular.isArray(this[key])) {
         this[key] = this[key].map(function (data) {
-          return new Model(data);
+          return new Model(data, _this);
         });
       } else if (angular.isString(this[key]) && $baseModel.isId(this[key])) {
-        this[key] = new Model({ id: this[key] });
+        this[key] = new Model({ id: this[key] }, this);
       } else {
-        this[key] = new Model(this[key]);
+        this[key] = new Model(this[key], this);
       }
     };
 
@@ -439,11 +436,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * From JSON converter
      */
     $baseModel.prototype.fromJSON = function (json) {
-      var _this = this;
+      var _this2 = this;
 
       if (angular.isObject(json)) {
         angular.forEach(json, function (value, key) {
-          _this[key] = $baseModel.valueFromJSON(value);
+          _this2[key] = $baseModel.valueFromJSON(value);
         }, this);
       }
       return this;
@@ -471,7 +468,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * Extract a subset of data from the model
      */
     $baseModel.prototype.extract = function (properties) {
-      var _this2 = this;
+      var _this3 = this;
 
       //Initialize object
       var obj = {};
@@ -479,11 +476,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       //No properties given? Iterate all object properties
       if (!angular.isArray(properties) || !properties.length) {
         angular.forEach(this, function (value, key) {
-          obj[key] = copyProperty(_this2, key);
+          obj[key] = copyProperty(_this3, key);
         });
       } else {
         angular.forEach(properties, function (key) {
-          obj[key] = copyProperty(_this2, key);
+          obj[key] = copyProperty(_this3, key);
         });
       }
 
@@ -495,11 +492,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * Merge a set of data into the model
      */
     $baseModel.prototype.merge = function (data) {
-      var _this3 = this;
+      var _this4 = this;
 
       if (data && angular.isObject(data)) {
         angular.forEach(data, function (value, key) {
-          _this3[key] = copyProperty(data, key);
+          _this4[key] = copyProperty(data, key);
         });
       }
     };
