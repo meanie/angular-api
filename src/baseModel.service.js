@@ -205,6 +205,13 @@ angular.module('BaseModel.Service', [])
   };
 
   /**
+   * Check if two models are the same (based on ID)
+   */
+  $baseModel.prototype.isSame = function(model) {
+    return (this.id && model.id && this.id === model.id);
+  };
+
+  /**
    * Copy a property
    */
   $baseModel.prototype.copyProperty = function(obj, key) {
