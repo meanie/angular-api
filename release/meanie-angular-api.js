@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.13.2 - 10-6-2016
+ * meanie-angular-api - v1.14.0 - 12-6-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -529,6 +529,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         delete clone.id;
       }
       return clone;
+    };
+
+    /**
+     * Check if two models are the same (based on ID)
+     */
+    $baseModel.prototype.isSame = function (model) {
+      return this.id && model.id && this.id === model.id;
     };
 
     /**
