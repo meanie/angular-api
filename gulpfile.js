@@ -47,7 +47,7 @@ function packageFileName(filename, ext) {
 function angularWrapper() {
   return {
     header: '(function(window, angular, undefined) {\'use strict\';\n',
-    footer: '\n})(window, window.angular);\n'
+    footer: '\n})(window, window.angular);\n',
   };
 }
 
@@ -79,7 +79,7 @@ function bannerWrapper() {
   //Return wrapper
   return {
     header: banner,
-    footer: ''
+    footer: '',
   };
 }
 
@@ -92,18 +92,18 @@ function bannerWrapper() {
  */
 function release() {
   let jsFilter = filter(['*.js'], {
-    restore: true
+    restore: true,
   });
   return gulp.src([
-    'src/**/*.js'
+    'src/**/*.js',
   ])
     .pipe(wrapper(angularWrapper()))
     .pipe(sourcemaps.init())
       .pipe(babel({
-        compact: false
+        compact: false,
       }))
       .pipe(ngAnnotate({
-        single_quotes: true
+        single_quotes: true,
       }))
       .pipe(concat(packageFileName('.js')))
       .pipe(wrapper(bannerWrapper()))
