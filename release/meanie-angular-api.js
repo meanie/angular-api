@@ -1,5 +1,5 @@
 /**
- * meanie-angular-api - v1.14.0 - 12-6-2016
+ * meanie-angular-api - v1.14.1 - 14-6-2016
  * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
@@ -522,11 +522,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     /**
      * Clone
      */
-    $baseModel.prototype.clone = function (stripId) {
+    $baseModel.prototype.clone = function (stripIds) {
       var ModelClass = this.constructor;
       var clone = new ModelClass(this.extract(), this.$parent);
-      if (clone.id && stripId) {
-        delete clone.id;
+      if (stripIds) {
+        $baseModel.stripIds(clone);
       }
       return clone;
     };
@@ -626,6 +626,29 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       angular.forEach(obj, function (value, key) {
         if (!keys.includes(key)) {
           delete obj[key];
+        }
+      });
+      return obj;
+    };
+
+    /**
+     * Strip ID's recursively from a given object
+     */
+    $baseModel.stripIds = function (obj) {
+      if (angular.isArray(obj)) {
+        return obj.map(function (obj) {
+          return $baseModel.stripIds(obj);
+        });
+      }
+      if (!obj || (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) !== 'object') {
+        return obj;
+      }
+      if (typeof obj.id !== 'undefined') {
+        delete obj.id;
+      }
+      angular.forEach(obj, function (value) {
+        if (value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
+          $baseModel.stripIds(value);
         }
       });
       return obj;
