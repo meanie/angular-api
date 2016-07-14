@@ -195,11 +195,11 @@ angular.module('BaseModel.Service', [])
   /**
    * Clone
    */
-  $baseModel.prototype.clone = function(stripId) {
+  $baseModel.prototype.clone = function(stripIds) {
     let ModelClass = this.constructor;
     let clone = new ModelClass(this.extract(), this.$parent);
-    if (clone.id && stripId) {
-      delete clone.id;
+    if (stripIds) {
+      $baseModel.stripIds(clone);
     }
     return clone;
   };
@@ -296,6 +296,27 @@ angular.module('BaseModel.Service', [])
     angular.forEach(obj, (value, key) => {
       if (!keys.includes(key)) {
         delete obj[key];
+      }
+    });
+    return obj;
+  };
+
+  /**
+   * Strip ID's recursively from a given object
+   */
+  $baseModel.stripIds = function(obj) {
+    if (angular.isArray(obj)) {
+      return obj.map(obj => $baseModel.stripIds(obj));
+    }
+    if (!obj || typeof obj !== 'object') {
+      return obj;
+    }
+    if (typeof obj.id !== 'undefined') {
+      delete obj.id;
+    }
+    angular.forEach(obj, value => {
+      if (value && typeof value === 'object') {
+        $baseModel.stripIds(value);
       }
     });
     return obj;
