@@ -12,7 +12,7 @@ An Angular service for interaction with API's
 
 ## Installation
 
-You can install this package using `npm`.
+You can install this package using `npm`:
 
 ```shell
 npm install meanie-angular-api --save

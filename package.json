@@ -17,10 +17,11 @@
   "bugs": {
     "url": "https://github.com/meanie/angular-api/issues"
   },
-  "instructions": "https://github.com/meanie/angular-api#usage",
+  "instructions": {
+    "url": "https://github.com/meanie/angular-api#usage"
+  },
   "keywords": [
     "meanie",
-    "meanie-module",
     "angular",
     "angularjs",
     "api",
@@ -29,10 +30,11 @@
   ],
   "main": "index.js",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint . --fix",
     "pretest": "npm run lint",
     "test": "karma start karma.conf.js",
-    "version": "gulp release && git add release/*",
+    "release": "gulp release",
+    "version": "npm run release && git add release/*",
     "postversion": "git push && git push --tags && npm publish"
   },
   "peerDependencies": {
@@ -42,7 +44,7 @@
     "angular": "^1.5.7",
     "angular-mocks": "^1.5.7",
     "babel-preset-es2015": "^6.9.0",
-    "eslint": "^2.13.1",
+    "eslint": "^3.1.0",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-babel": "^6.1.2",
     "gulp-concat": "^2.6.0",
@@ -54,7 +56,7 @@
     "gulp-wrapper": "^1.0.0",
     "jasmine-core": "^2.4.1",
     "jasmine-spec-reporter": "^2.5.0",
-    "karma": "^1.1.0",
+    "karma": "^1.1.1",
     "karma-babel-preprocessor": "^6.0.1",
     "karma-jasmine": "^1.0.2",
     "karma-phantomjs-launcher": "^1.0.1",
