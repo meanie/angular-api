@@ -1,12 +1,9 @@
 /**
- * meanie-angular-api - v1.14.2 - 18-6-2016
- * https://github.com/meanie/angular-api
+ * meanie-angular-api * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2016 Adam Buczynski <me@adambuczynski.com>
  * License: MIT
  */
-'use strict';
-
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 (function (window, angular, undefined) {
@@ -147,8 +144,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     };
   }]);
 })(window, window.angular);
-'use strict';
-
 (function (window, angular, undefined) {
   'use strict';
 
@@ -311,8 +306,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }];
   });
 })(window, window.angular);
-'use strict';
-
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 (function (window, angular, undefined) {
@@ -665,8 +658,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return $baseModel;
   }]);
 })(window, window.angular);
-'use strict';
-
 (function (window, angular, undefined) {
   'use strict';
 
@@ -708,8 +699,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     };
   }]);
 })(window, window.angular);
-'use strict';
-
 (function (window, angular, undefined) {
   'use strict';
 

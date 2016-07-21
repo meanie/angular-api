@@ -13,13 +13,13 @@ module.exports = function(config) {
       'node_modules/angular/angular.js',
       'node_modules/angular-mocks/angular-mocks.js',
       'src/**/*.js',
-      'tests/**/*.spec.js'
+      'tests/**/*.spec.js',
     ],
 
     //Preprocessors
     preprocessors: {
       'src/**/*.js': ['babel'],
-      'tests/**/*.spec.js': ['babel']
+      'tests/**/*.spec.js': ['babel'],
     },
 
     //Frameworks to use
@@ -54,6 +54,6 @@ module.exports = function(config) {
     singleRun: true,
 
     //Don't fail on empty test suite
-    failOnEmptyTestSuite: false
+    failOnEmptyTestSuite: false,
   });
 };
