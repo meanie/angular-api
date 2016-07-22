@@ -53,9 +53,15 @@ angular.module('BaseModel.Service', [])
   function $baseModel(data, parent) {
 
     //Define parent property
+    let _parent = parent;
     Object.defineProperty(this, '$parent', {
       enumerable: false,
-      value: parent,
+      get() {
+        return _parent;
+      },
+      set(parent) {
+        _parent = parent;
+      },
     });
 
     //Load data
