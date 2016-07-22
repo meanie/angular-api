@@ -373,9 +373,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     function $baseModel(data, parent) {
 
       //Define parent property
+      var _parent = parent;
       Object.defineProperty(this, '$parent', {
         enumerable: false,
-        value: parent
+        get: function get() {
+          return _parent;
+        },
+        set: function set(parent) {
+          _parent = parent;
+        }
       });
 
       //Load data
