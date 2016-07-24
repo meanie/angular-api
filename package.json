@@ -38,7 +38,7 @@
     "postversion": "git push && git push --tags && npm publish"
   },
   "peerDependencies": {
-    "meanie-angular-url": ">= 1.1.0"
+    "meanie-angular-url": ">= 1.2.0"
   },
   "devDependencies": {
     "angular": "^1.5.7",
