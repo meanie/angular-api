@@ -534,6 +534,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * Check if two models are the same (based on ID)
      */
     $baseModel.prototype.isSame = function (model) {
+      if (!angular.isObject(model)) {
+        return false;
+      }
       return this.id && model.id && this.id === model.id;
     };
 
