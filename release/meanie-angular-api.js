@@ -482,7 +482,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       //No properties given? Iterate all object properties
       if (!angular.isArray(properties) || !properties.length) {
         angular.forEach(this, function (value, key) {
-          obj[key] = copyProperty(_this3, key);
+          if (key.substr(0, 2) !== '$$') {
+            obj[key] = copyProperty(_this3, key);
+          }
         });
       } else {
         angular.forEach(properties, function (key) {
@@ -587,7 +589,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
         var copy = {};
         for (var prop in value) {
-          if (value.hasOwnProperty(prop)) {
+          if (value.hasOwnProperty(prop) && prop.substr(0, 2) !== '$$') {
             copy[prop] = $baseModel.valueToJSON(value[prop]);
           }
         }
