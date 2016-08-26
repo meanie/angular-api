@@ -163,7 +163,9 @@ angular.module('BaseModel.Service', [])
     //No properties given? Iterate all object properties
     if (!angular.isArray(properties) || !properties.length) {
       angular.forEach(this, (value, key) => {
-        obj[key] = copyProperty(this, key);
+        if (key.substr(0, 2) !== '$$') {
+          obj[key] = copyProperty(this, key);
+        }
       });
     }
     else {
@@ -270,7 +272,7 @@ angular.module('BaseModel.Service', [])
       }
       let copy = {};
       for (let prop in value) {
-        if (value.hasOwnProperty(prop)) {
+        if (value.hasOwnProperty(prop) && prop.substr(0, 2) !== '$$') {
           copy[prop] = $baseModel.valueToJSON(value[prop]);
         }
       }
