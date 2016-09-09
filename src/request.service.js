@@ -3,7 +3,7 @@
  * Module definition and dependencies
  */
 angular.module('Api.Request.Service', [
-  'Url.Service'
+  'Url.Service',
 ])
 
 /**
@@ -161,7 +161,7 @@ angular.module('Api.Request.Service', [
     let stripConfigKeys = [
       'params', 'model', 'isArray', 'isModel',
       'successInterceptor', 'errorInterceptor',
-      'stripTrailingSlashes'
+      'stripTrailingSlashes',
     ];
 
     //Map action config to http request config
@@ -183,6 +183,9 @@ angular.module('Api.Request.Service', [
         request.data = angular.extend({}, data);
       }
     }
+
+    //Ensure we don't overwrite the params objects keys in place
+    params = angular.copy(params);
 
     //Process params
     if (params && angular.isObject(params)) {
