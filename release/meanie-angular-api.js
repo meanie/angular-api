@@ -887,6 +887,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
       }
 
+      //Ensure we don't overwrite the params objects keys in place
+      params = angular.copy(params);
+
       //Process params
       if (params && angular.isObject(params)) {
         for (var key in params) {
