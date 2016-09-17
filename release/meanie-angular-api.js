@@ -863,7 +863,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     /**
      * Create request config
      */
-    function createRequestConfig(action, params, data) {
+    function createRequestConfig(action, params, data, config) {
 
       //Initialize
       var request = {};
@@ -875,6 +875,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           request[key] = angular.copy(value);
         }
       });
+
+      //Attach given extra config
+      if (config && angular.isObject(config)) {
+        angular.forEach(config, function (value, key) {
+          request[key] = angular.copy(value);
+        });
+      }
 
       //Append data if we have a body
       if (action.hasBody() && data && angular.isObject(data)) {
@@ -924,7 +931,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     /**
      * Api request executer
      */
-    return function ApiRequest(action, params, data) {
+    return function ApiRequest(action, params, data, config) {
 
       //Parameter juggling
       if (action.hasBody() && params && !data) {
@@ -934,7 +941,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       //Create request config and use $http to do the request
       //and intercept the response
-      var request = createRequestConfig(action, params, data);
+      var request = createRequestConfig(action, params, data, config);
       var promise = $http(request).then(action.successInterceptor.bind(action), action.errorInterceptor.bind(action));
 
       //Then handle the raw data
