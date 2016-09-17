@@ -154,7 +154,7 @@ angular.module('Api.Request.Service', [
   /**
    * Create request config
    */
-  function createRequestConfig(action, params, data) {
+  function createRequestConfig(action, params, data, config) {
 
     //Initialize
     let request = {};
@@ -170,6 +170,13 @@ angular.module('Api.Request.Service', [
         request[key] = angular.copy(value);
       }
     });
+
+    //Attach given extra config
+    if (config && angular.isObject(config)) {
+      angular.forEach(config, (value, key) => {
+        request[key] = angular.copy(value);
+      });
+    }
 
     //Append data if we have a body
     if (action.hasBody() && data && angular.isObject(data)) {
@@ -222,7 +229,7 @@ angular.module('Api.Request.Service', [
   /**
    * Api request executer
    */
-  return function ApiRequest(action, params, data) {
+  return function ApiRequest(action, params, data, config) {
 
     //Parameter juggling
     if (action.hasBody() && params && !data) {
@@ -232,7 +239,7 @@ angular.module('Api.Request.Service', [
 
     //Create request config and use $http to do the request
     //and intercept the response
-    let request = createRequestConfig(action, params, data);
+    let request = createRequestConfig(action, params, data, config);
     let promise = $http(request).then(
       action.successInterceptor.bind(action),
       action.errorInterceptor.bind(action)
