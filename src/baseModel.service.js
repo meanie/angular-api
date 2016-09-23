@@ -217,7 +217,7 @@ angular.module('BaseModel.Service', [])
    */
   $baseModel.prototype.isSame = function(model) {
     if (!angular.isObject(model)) {
-      return false;
+      return (this.id === model);
     }
     return (this.id && model.id && this.id === model.id);
   };
