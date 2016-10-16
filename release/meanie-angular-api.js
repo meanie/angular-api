@@ -523,11 +523,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     /**
      * Clone
      */
-    $baseModel.prototype.clone = function (stripIds) {
+    $baseModel.prototype.clone = function (stripId) {
       var ModelClass = this.constructor;
       var clone = new ModelClass(this.extract(), this.$parent);
-      if (stripIds) {
-        $baseModel.stripIds(clone);
+      if (stripId) {
+        delete clone.id;
       }
       return clone;
     };
