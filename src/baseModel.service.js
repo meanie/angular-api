@@ -203,11 +203,11 @@ angular.module('BaseModel.Service', [])
   /**
    * Clone
    */
-  $baseModel.prototype.clone = function(stripIds) {
+  $baseModel.prototype.clone = function(stripId) {
     let ModelClass = this.constructor;
     let clone = new ModelClass(this.extract(), this.$parent);
-    if (stripIds) {
-      $baseModel.stripIds(clone);
+    if (stripId) {
+      delete clone.id;
     }
     return clone;
   };
