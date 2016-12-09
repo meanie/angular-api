@@ -233,4 +233,4 @@ Pull requests are welcome! If you would like to contribute to Meanie, please che
 ## License
 (MIT License)
 
-Copyright 2015-2016, [Adam Buczynski](http://adambuczynski.com)
+Copyright 2015-2017, [Adam Reis](http://adam.reis.nz)
