@@ -256,7 +256,19 @@ angular.module('BaseModel.Service', [])
       let date = dateStringToMoment(value);
       return date || value;
     }
-    return angular.copy(value);
+    else if (value && angular.isObject(value)) {
+      if (value._isAMomentObject) {
+        return value.clone();
+      }
+      let copy = {};
+      for (let prop in value) {
+        if (value.hasOwnProperty(prop)) {
+          copy[prop] = $baseModel.valueFromJSON(value[prop]);
+        }
+      }
+      return copy;
+    }
+    return value;
   };
 
   /**
