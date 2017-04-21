@@ -1,7 +1,7 @@
 /**
  * meanie-angular-api * https://github.com/meanie/angular-api
  *
- * Copyright (c) 2016 Adam Reis <adam@reis.nz>
+ * Copyright (c) 2017 Adam Reis <adam@reis.nz>
  * License: MIT
  */
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -573,8 +573,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       } else if (moment && angular.isString(value)) {
         var date = dateStringToMoment(value);
         return date || value;
+      } else if (value && angular.isObject(value)) {
+        if (value._isAMomentObject) {
+          return value.clone();
+        }
+        var copy = {};
+        for (var prop in value) {
+          if (value.hasOwnProperty(prop)) {
+            copy[prop] = $baseModel.valueFromJSON(value[prop]);
+          }
+        }
+        return copy;
       }
-      return angular.copy(value);
+      return value;
     };
 
     /**
