@@ -157,6 +157,11 @@ angular.module('BaseModel.Service', [])
    */
   $baseModel.prototype.extract = function(properties) {
 
+    //If string given, just return copy of one property
+    if (typeof properties === 'string') {
+      return copyProperty(this, properties);
+    }
+
     //Initialize object
     let obj = {};
 
