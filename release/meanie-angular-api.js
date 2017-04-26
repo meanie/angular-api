@@ -476,6 +476,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     $baseModel.prototype.extract = function (properties) {
       var _this3 = this;
 
+      //If string given, just return copy of one property
+      if (typeof properties === 'string') {
+        return copyProperty(this, properties);
+      }
+
       //Initialize object
       var obj = {};
 
