@@ -3,7 +3,7 @@
  * Module definition and dependencies
  */
 angular.module('Api.Service', [
-  'Api.Endpoint.Service'
+  'Api.Endpoint.Service',
 ])
 
 /**
@@ -20,27 +20,27 @@ angular.module('Api.Service', [
       query: {
         method: 'GET',
         isArray: true,
-        isModel: true
+        isModel: true,
       },
       get: {
         method: 'GET',
-        isModel: true
+        isModel: true,
       },
       create: {
-        method: 'POST'
+        method: 'POST',
       },
       update: {
-        method: 'PUT'
+        method: 'PUT',
       },
       delete: {
-        method: 'DELETE'
-      }
+        method: 'DELETE',
+      },
     },
     params: {
-      id: '@id'
+      id: '@id',
     },
     model: '',
-    stripTrailingSlashes: true
+    stripTrailingSlashes: true,
   };
 
   //Registered endpoints
