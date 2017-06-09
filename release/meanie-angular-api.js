@@ -32,7 +32,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       //Validate
       if (!$injector.has(model)) {
-        $log.warn('Unknown model class/service:', model);
+        if (model !== '$baseModel') {
+          $log.warn('Unknown model class/service:', model);
+        }
         return null;
       }
 

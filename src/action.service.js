@@ -23,7 +23,9 @@ angular.module('Api.Action.Service', [
 
     //Validate
     if (!$injector.has(model)) {
-      $log.warn('Unknown model class/service:', model);
+      if (model !== '$baseModel') {
+        $log.warn('Unknown model class/service:', model);
+      }
       return null;
     }
 
