@@ -3,7 +3,7 @@
  * Module definition and dependencies
  */
 angular.module('Api.Action.Service', [
-  'Url.Service'
+  'Url.Service',
 ])
 
 /**
@@ -44,6 +44,15 @@ angular.module('Api.Action.Service', [
     this.model = this.model || endpoint.model || false;
     this.method = this.method || 'GET';
     this.enforceDataFormat = endpoint.enforceDataFormat || false;
+
+    //Append config
+    if (endpoint.config) {
+      for (let key in endpoint.config) {
+        if (endpoint.config.hasOwnProperty(key)) {
+          this[key] = endpoint.config[key];
+        }
+      }
+    }
 
     //Determine params
     if (typeof this.params === 'undefined') {
