@@ -56,6 +56,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       this.method = this.method || 'GET';
       this.enforceDataFormat = endpoint.enforceDataFormat || false;
 
+      //Append config
+      if (endpoint.config) {
+        for (var key in endpoint.config) {
+          if (endpoint.config.hasOwnProperty(key)) {
+            this[key] = endpoint.config[key];
+          }
+        }
+      }
+
       //Determine params
       if (typeof this.params === 'undefined') {
         this.params = endpoint.params;
@@ -189,6 +198,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         id: '@id'
       },
       model: '',
+      config: {},
       stripTrailingSlashes: true
     };
 
@@ -252,7 +262,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * want to pass on to the $http service)
      */
     this.setConfig = function (param, value) {
-      this.defaults[param] = value;
+      this.defaults.config[param] = value;
       return this;
     };
 
