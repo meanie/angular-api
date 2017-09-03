@@ -1,10 +1,10 @@
 /**
- * meanie-angular-api * https://github.com/meanie/angular-api
+ * @meanie/angular-api * https://github.com/meanie/angular-api
  *
  * Copyright (c) 2017 Adam Reis <adam@reis.nz>
  * License: MIT
  */
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 (function (window, angular, undefined) {
   'use strict';
@@ -318,7 +318,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }];
   });
 })(window, window.angular);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 (function (window, angular, undefined) {
   'use strict';
@@ -362,16 +362,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      */
     function copyProperty(obj, key) {
       if (angular.isArray(obj[key])) {
-        var _ret = function () {
-          var arr = obj[key];
-          return {
-            v: arr.map(function (value, key) {
-              return copyProperty(arr, key);
-            })
-          };
-        }();
-
-        if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+        var arr = obj[key];
+        return arr.map(function (value, key) {
+          return copyProperty(arr, key);
+        });
       }
       if (obj[key] && angular.isFunction(obj[key].clone)) {
         return obj[key].clone();
@@ -862,13 +856,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         //If defined and not null, encode it and replace in URL
         if (angular.isDefined(val) && val !== null) {
-          (function () {
-            var encodedVal = $url.encodeUriSegment(val);
-            regex = new RegExp(':' + urlParam + '(\\W|$)', 'g');
-            url = url.replace(regex, function (match, tail) {
-              return encodedVal + tail;
-            });
-          })();
+          var encodedVal = $url.encodeUriSegment(val);
+          regex = new RegExp(':' + urlParam + '(\\W|$)', 'g');
+          url = url.replace(regex, function (match, tail) {
+            return encodedVal + tail;
+          });
         }
 
         //Otherwise, remove from URL
