@@ -23,7 +23,7 @@ angular.module('BaseModel.Service', [])
    * Returns a moment if it is and null if it's not
    */
   function dateStringToMoment(value) {
-    let regex = /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2}).*/;
+    let regex = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).*/;
     if (value.match(regex)) {
       let date = moment(value, moment.ISO_8601, true);
       if (date.isValid()) {
@@ -39,6 +39,7 @@ angular.module('BaseModel.Service', [])
   function copyProperty(obj, key) {
     if (angular.isArray(obj[key])) {
       let arr = obj[key];
+      //eslint-disable-next-line no-unused-vars
       return arr.map((value, key) => copyProperty(arr, key));
     }
     if (obj[key] && angular.isFunction(obj[key].clone)) {
@@ -167,6 +168,7 @@ angular.module('BaseModel.Service', [])
 
     //No properties given? Iterate all object properties
     if (!angular.isArray(properties) || !properties.length) {
+      //eslint-disable-next-line no-unused-vars
       angular.forEach(this, (value, key) => {
         if (key.substr(0, 2) !== '$$') {
           obj[key] = copyProperty(this, key);
@@ -188,10 +190,12 @@ angular.module('BaseModel.Service', [])
    */
   $baseModel.prototype.merge = function(data) {
     if (data && angular.isObject(data)) {
+      //eslint-disable-next-line no-unused-vars
       angular.forEach(data, (value, key) => {
         this[key] = copyProperty(data, key);
       });
     }
+    return this;
   };
 
   /**
@@ -203,6 +207,7 @@ angular.module('BaseModel.Service', [])
         delete this[key];
       }
     }
+    return this;
   };
 
   /**
@@ -321,6 +326,7 @@ angular.module('BaseModel.Service', [])
     if (!obj || typeof obj !== 'object') {
       return obj;
     }
+    //eslint-disable-next-line no-unused-vars
     angular.forEach(obj, (value, key) => {
       if (!keys.includes(key)) {
         delete obj[key];
