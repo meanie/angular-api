@@ -4,7 +4,7 @@
  * Copyright (c) 2017 Adam Reis <adam@reis.nz>
  * License: MIT
  */
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 (function (window, angular, undefined) {
   'use strict';
@@ -318,7 +318,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }];
   });
 })(window, window.angular);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 (function (window, angular, undefined) {
   'use strict';
@@ -347,7 +347,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * Returns a moment if it is and null if it's not
      */
     function dateStringToMoment(value) {
-      var regex = /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2}).*/;
+      var regex = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).*/;
       if (value.match(regex)) {
         var date = moment(value, moment.ISO_8601, true);
         if (date.isValid()) {
@@ -362,10 +362,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      */
     function copyProperty(obj, key) {
       if (angular.isArray(obj[key])) {
-        var arr = obj[key];
-        return arr.map(function (value, key) {
-          return copyProperty(arr, key);
-        });
+        var _ret = function () {
+          var arr = obj[key];
+          //eslint-disable-next-line no-unused-vars
+          return {
+            v: arr.map(function (value, key) {
+              return copyProperty(arr, key);
+            })
+          };
+        }();
+
+        if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
       }
       if (obj[key] && angular.isFunction(obj[key].clone)) {
         return obj[key].clone();
@@ -492,6 +499,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       //No properties given? Iterate all object properties
       if (!angular.isArray(properties) || !properties.length) {
+        //eslint-disable-next-line no-unused-vars
         angular.forEach(this, function (value, key) {
           if (key.substr(0, 2) !== '$$') {
             obj[key] = copyProperty(_this3, key);
@@ -514,10 +522,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       var _this4 = this;
 
       if (data && angular.isObject(data)) {
+        //eslint-disable-next-line no-unused-vars
         angular.forEach(data, function (value, key) {
           _this4[key] = copyProperty(data, key);
         });
       }
+      return this;
     };
 
     /**
@@ -529,6 +539,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           delete this[key];
         }
       }
+      return this;
     };
 
     /**
@@ -649,6 +660,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       if (!obj || (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) !== 'object') {
         return obj;
       }
+      //eslint-disable-next-line no-unused-vars
       angular.forEach(obj, function (value, key) {
         if (!keys.includes(key)) {
           delete obj[key];
@@ -856,11 +868,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         //If defined and not null, encode it and replace in URL
         if (angular.isDefined(val) && val !== null) {
-          var encodedVal = $url.encodeUriSegment(val);
-          regex = new RegExp(':' + urlParam + '(\\W|$)', 'g');
-          url = url.replace(regex, function (match, tail) {
-            return encodedVal + tail;
-          });
+          (function () {
+            var encodedVal = $url.encodeUriSegment(val);
+            regex = new RegExp(':' + urlParam + '(\\W|$)', 'g');
+            url = url.replace(regex, function (match, tail) {
+              return encodedVal + tail;
+            });
+          })();
         }
 
         //Otherwise, remove from URL
