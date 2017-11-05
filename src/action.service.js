@@ -99,6 +99,11 @@ angular.module('Api.Action.Service', [
       return data.map(data => this.convertToModel(data));
     }
 
+    //No data?
+    if (!data || data === null) {
+      return null;
+    }
+
     //Get model class and return model instance
     let Model = $injector.get(this.model);
     return new Model(data);
