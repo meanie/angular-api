@@ -133,8 +133,13 @@ angular.module('Api.Action.Service', [
       }
     }
 
-    //Initialize if empty
-    return response.data || (expectsArray ? [] : {});
+    //Empty array if no data sent
+    if (expectsArray && !response.data) {
+      return [];
+    }
+
+    //Sent data as is (also if null)
+    return response.data;
   };
 
   /**

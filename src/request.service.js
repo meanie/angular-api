@@ -118,6 +118,7 @@ angular.module('Api.Request.Service', [
     url = url.replace(/\\:/g, ':');
 
     //Loop the valid URL params now
+    //eslint-disable-next-line no-unused-vars
     angular.forEach(urlParams, (t, urlParam) => {
 
       //Extract value for this url param from given params
@@ -128,6 +129,7 @@ angular.module('Api.Request.Service', [
       if (angular.isDefined(val) && val !== null) {
         let encodedVal = $url.encodeUriSegment(val);
         regex = new RegExp(':' + urlParam + '(\\W|$)', 'g');
+        //eslint-disable-next-line no-unused-vars
         url = url.replace(regex, (match, tail) => {
           return encodedVal + tail;
         });
@@ -135,7 +137,8 @@ angular.module('Api.Request.Service', [
 
       //Otherwise, remove from URL
       else {
-        regex = new RegExp('(\/?):' + urlParam + '(\\W|$)', 'g');
+        regex = new RegExp('(/?):' + urlParam + '(\\W|$)', 'g');
+        //eslint-disable-next-line no-unused-vars
         url = url.replace(regex, (match, leadingSlashes, tail) => {
           if (tail.charAt(0) === '/') {
             return tail;
@@ -240,17 +243,14 @@ angular.module('Api.Request.Service', [
     //Create request config and use $http to do the request
     //and intercept the response
     let request = createRequestConfig(action, params, data, config);
-    let promise = $http(request).then(
-      action.successInterceptor.bind(action),
-      action.errorInterceptor.bind(action)
-    );
-
-    //Then handle the raw data
-    return promise.then(raw => {
-      if (action.expectsModel()) {
-        return action.convertToModel(raw);
-      }
-      return raw;
-    });
+    return $http(request)
+      .then(action.successInterceptor.bind(action))
+      .catch(action.errorInterceptor.bind(action))
+      .then(raw => {
+        if (action.expectsModel()) {
+          return action.convertToModel(raw);
+        }
+        return raw;
+      });
   };
 });
