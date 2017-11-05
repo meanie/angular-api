@@ -4,7 +4,7 @@
  * Copyright (c) 2017 Adam Reis <adam@reis.nz>
  * License: MIT
  */
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 (function (window, angular, undefined) {
   'use strict';
@@ -112,6 +112,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         });
       }
 
+      //No data?
+      if (!data || data === null) {
+        return null;
+      }
+
       //Get model class and return model instance
       var Model = $injector.get(this.model);
       return new Model(data);
@@ -138,8 +143,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
       }
 
-      //Initialize if empty
-      return response.data || (expectsArray ? [] : {});
+      //Empty array if no data sent
+      if (expectsArray && !response.data) {
+        return [];
+      }
+
+      //Sent data as is (also if null)
+      return response.data;
     };
 
     /**
@@ -318,7 +328,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }];
   });
 })(window, window.angular);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 (function (window, angular, undefined) {
   'use strict';
@@ -362,17 +372,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      */
     function copyProperty(obj, key) {
       if (angular.isArray(obj[key])) {
-        var _ret = function () {
-          var arr = obj[key];
-          //eslint-disable-next-line no-unused-vars
-          return {
-            v: arr.map(function (value, key) {
-              return copyProperty(arr, key);
-            })
-          };
-        }();
-
-        if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+        var arr = obj[key];
+        //eslint-disable-next-line no-unused-vars
+        return arr.map(function (value, key) {
+          return copyProperty(arr, key);
+        });
       }
       if (obj[key] && angular.isFunction(obj[key].clone)) {
         return obj[key].clone();
@@ -860,6 +864,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       url = url.replace(/\\:/g, ':');
 
       //Loop the valid URL params now
+      //eslint-disable-next-line no-unused-vars
       angular.forEach(urlParams, function (t, urlParam) {
 
         //Extract value for this url param from given params
@@ -868,18 +873,18 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         //If defined and not null, encode it and replace in URL
         if (angular.isDefined(val) && val !== null) {
-          (function () {
-            var encodedVal = $url.encodeUriSegment(val);
-            regex = new RegExp(':' + urlParam + '(\\W|$)', 'g');
-            url = url.replace(regex, function (match, tail) {
-              return encodedVal + tail;
-            });
-          })();
+          var encodedVal = $url.encodeUriSegment(val);
+          regex = new RegExp(':' + urlParam + '(\\W|$)', 'g');
+          //eslint-disable-next-line no-unused-vars
+          url = url.replace(regex, function (match, tail) {
+            return encodedVal + tail;
+          });
         }
 
         //Otherwise, remove from URL
         else {
-            regex = new RegExp('(\/?):' + urlParam + '(\\W|$)', 'g');
+            regex = new RegExp('(/?):' + urlParam + '(\\W|$)', 'g');
+            //eslint-disable-next-line no-unused-vars
             url = url.replace(regex, function (match, leadingSlashes, tail) {
               if (tail.charAt(0) === '/') {
                 return tail;
@@ -976,10 +981,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       //Create request config and use $http to do the request
       //and intercept the response
       var request = createRequestConfig(action, params, data, config);
-      var promise = $http(request).then(action.successInterceptor.bind(action), action.errorInterceptor.bind(action));
-
-      //Then handle the raw data
-      return promise.then(function (raw) {
+      return $http(request).then(action.successInterceptor.bind(action)).catch(action.errorInterceptor.bind(action)).then(function (raw) {
         if (action.expectsModel()) {
           return action.convertToModel(raw);
         }
