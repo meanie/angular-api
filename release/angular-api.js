@@ -135,7 +135,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       if (isArray !== expectsArray) {
 
         //Issue warning
-        $log.warn('Expected', expectsArray ? 'array' : 'object', 'as response, got', isArray ? 'array' : _typeof(response.data));
+        $log.warn('Expected', expectsArray ? 'array' : 'object', 'as response, got', isArray ? 'array' : _typeof(response.data), 'for', this.method, this.url);
 
         //Enforce data format?
         if (this.enforceDataFormat) {
