@@ -99,6 +99,11 @@ angular.module('Api.Action.Service', [
       return data.map(data => this.convertToModel(data));
     }
 
+    //No data?
+    if (!data || data === null) {
+      return null;
+    }
+
     //Get model class and return model instance
     let Model = $injector.get(this.model);
     return new Model(data);
@@ -108,6 +113,7 @@ angular.module('Api.Action.Service', [
    * Default error response interceptor
    */
   ApiAction.prototype.parseData = function(data) {
+
     //Get flags
     const expectsArray = this.expectsArray();
     const expectsModel = this.expectsModel();
@@ -119,7 +125,8 @@ angular.module('Api.Action.Service', [
       //Issue warning
       $log.warn(
         'Expected', expectsArray ? 'array' : 'object',
-        'as response, got', isArray ? 'array' : (typeof data)
+        'as response, got', isArray ? 'array' : (typeof data),
+        'for', this.method, this.url
       );
 
       //Enforce data format?
@@ -128,8 +135,10 @@ angular.module('Api.Action.Service', [
       }
     }
 
-    //Initialize if empty
-    // data = data || (expectsArray ? [] : {});
+    //Empty array if no data sent
+    if (expectsArray && !data) {
+      return [];
+    }
 
     //Expecting model?
     if (expectsModel) {
