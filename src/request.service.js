@@ -239,18 +239,9 @@ angular.module('Api.Request.Service', [
 
     //Create request config and use $http to do the request
     //and intercept the response
-    let request = createRequestConfig(action, params, data, config);
-    let promise = $http(request).then(
-      action.successInterceptor.bind(action),
-      action.errorInterceptor.bind(action)
-    );
-
-    //Then handle the raw data
-    return promise.then(raw => {
-      if (action.expectsModel()) {
-        return action.convertToModel(raw);
-      }
-      return raw;
-    });
+    const request = createRequestConfig(action, params, data, config);
+    return $http(request)
+      .then(response => action.successInterceptor(response))
+      .catch(error => action.errorInterceptor(error));
   };
 });

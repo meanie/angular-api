@@ -105,31 +105,65 @@ angular.module('Api.Action.Service', [
   };
 
   /**
-   * Default success response interceptor
+   * Default error response interceptor
    */
-  ApiAction.prototype.successInterceptor = function(response) {
-
-    //Check if we expect an array
-    let expectsArray = this.expectsArray();
-    let isArray = angular.isArray(response.data);
+  ApiAction.prototype.parseData = function(data) {
+    //Get flags
+    const expectsArray = this.expectsArray();
+    const expectsModel = this.expectsModel();
 
     //Validate data type
+    const isArray = angular.isArray(data);
     if (isArray !== expectsArray) {
 
       //Issue warning
       $log.warn(
         'Expected', expectsArray ? 'array' : 'object',
-        'as response, got', isArray ? 'array' : (typeof response.data)
+        'as response, got', isArray ? 'array' : (typeof data)
       );
 
       //Enforce data format?
       if (this.enforceDataFormat) {
-        response.data = (expectsArray ? [] : {});
+        data = (expectsArray ? [] : {});
       }
     }
 
     //Initialize if empty
-    return response.data || (expectsArray ? [] : {});
+    // data = data || (expectsArray ? [] : {});
+
+    //Expecting model?
+    if (expectsModel) {
+      return this.convertToModel(data);
+    }
+
+    //Return as is
+    return data;
+  };
+
+  /**
+   * Default success response interceptor
+   */
+  ApiAction.prototype.successInterceptor = function(response) {
+
+    //Get raw response data
+    const raw = response.data;
+    const {dataKey} = this;
+
+    //Using data key?
+    if (dataKey) {
+
+      //Ensure present
+      if (typeof raw[dataKey] === 'undefined') {
+        throw new Error(`Unknown data key: ${dataKey}`);
+      }
+
+      //Parse data and set in raw response
+      raw[dataKey] = this.parseData(raw[dataKey]);
+      return raw;
+    }
+
+    //Simple data, parse and return
+    return this.parseData(raw);
   };
 
   /**
