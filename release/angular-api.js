@@ -1,10 +1,10 @@
 /**
  * @meanie/angular-api * https://github.com/meanie/angular-api
  *
- * Copyright (c) 2017 Adam Reis <adam@reis.nz>
+ * Copyright (c) 2018 Adam Reis <adam@reis.nz>
  * License: MIT
  */
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 (function (window, angular, undefined) {
   'use strict';
@@ -123,33 +123,66 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     };
 
     /**
-     * Default success response interceptor
+     * Default error response interceptor
      */
-    ApiAction.prototype.successInterceptor = function (response) {
+    ApiAction.prototype.parseData = function (data) {
 
-      //Check if we expect an array
+      //Get flags
       var expectsArray = this.expectsArray();
-      var isArray = angular.isArray(response.data);
+      var expectsModel = this.expectsModel();
 
       //Validate data type
+      var isArray = angular.isArray(data);
       if (isArray !== expectsArray) {
 
         //Issue warning
-        $log.warn('Expected', expectsArray ? 'array' : 'object', 'as response, got', isArray ? 'array' : _typeof(response.data), 'for', this.method, this.url);
+        $log.warn('Expected', expectsArray ? 'array' : 'object', 'as response, got', isArray ? 'array' : typeof data === 'undefined' ? 'undefined' : _typeof(data), 'for', this.method, this.url);
 
         //Enforce data format?
         if (this.enforceDataFormat) {
-          response.data = expectsArray ? [] : {};
+          data = expectsArray ? [] : {};
         }
       }
 
       //Empty array if no data sent
-      if (expectsArray && !response.data) {
+      if (expectsArray && !data) {
         return [];
       }
 
-      //Sent data as is (also if null)
-      return response.data;
+      //Expecting model?
+      if (expectsModel) {
+        return this.convertToModel(data);
+      }
+
+      //Return as is
+      return data;
+    };
+
+    /**
+     * Default success response interceptor
+     */
+    ApiAction.prototype.successInterceptor = function (response) {
+
+      //Get raw response data
+      var raw = response.data;
+      var dataKey = this.dataKey;
+
+      //Using data key?
+
+      if (dataKey) {
+
+        //Ensure present
+        if (typeof raw[dataKey] === 'undefined') {
+          throw new Error('Unknown data key: ' + dataKey);
+        }
+
+        //Parse data and set in raw response
+        raw[dataKey] = this.parseData(raw[dataKey]);
+        return raw;
+      }
+
+      //Simple data, parse and return
+      return this.parseData(raw);
     };
 
     /**
@@ -328,7 +361,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }];
   });
 })(window, window.angular);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 (function (window, angular, undefined) {
   'use strict';
@@ -372,11 +405,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      */
     function copyProperty(obj, key) {
       if (angular.isArray(obj[key])) {
-        var arr = obj[key];
-        //eslint-disable-next-line no-unused-vars
-        return arr.map(function (value, key) {
-          return copyProperty(arr, key);
-        });
+        var _ret = function () {
+          var arr = obj[key];
+          //eslint-disable-next-line no-unused-vars
+          return {
+            v: arr.map(function (value, key) {
+              return copyProperty(arr, key);
+            })
+          };
+        }();
+
+        if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
       }
       if (obj[key] && angular.isFunction(obj[key].clone)) {
         return obj[key].clone();
@@ -873,12 +912,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         //If defined and not null, encode it and replace in URL
         if (angular.isDefined(val) && val !== null) {
-          var encodedVal = $url.encodeUriSegment(val);
-          regex = new RegExp(':' + urlParam + '(\\W|$)', 'g');
-          //eslint-disable-next-line no-unused-vars
-          url = url.replace(regex, function (match, tail) {
-            return encodedVal + tail;
-          });
+          (function () {
+            var encodedVal = $url.encodeUriSegment(val);
+            regex = new RegExp(':' + urlParam + '(\\W|$)', 'g');
+            //eslint-disable-next-line no-unused-vars
+            url = url.replace(regex, function (match, tail) {
+              return encodedVal + tail;
+            });
+          })();
         }
 
         //Otherwise, remove from URL
@@ -981,11 +1022,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       //Create request config and use $http to do the request
       //and intercept the response
       var request = createRequestConfig(action, params, data, config);
-      return $http(request).then(action.successInterceptor.bind(action)).catch(action.errorInterceptor.bind(action)).then(function (raw) {
-        if (action.expectsModel()) {
-          return action.convertToModel(raw);
-        }
-        return raw;
+      return $http(request).then(function (response) {
+        return action.successInterceptor(response);
+      }).catch(function (error) {
+        return action.errorInterceptor(error);
       });
     };
   }]);
