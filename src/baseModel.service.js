@@ -215,6 +215,7 @@ angular.module('BaseModel.Service', [])
    */
   $baseModel.prototype.clone = function(stripId) {
     let ModelClass = this.constructor;
+    //TODO: Should this be toJSON() ??
     let clone = new ModelClass(this.extract(), this.$parent);
     if (stripId) {
       delete clone.id;
