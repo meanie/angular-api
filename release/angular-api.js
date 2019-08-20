@@ -1,7 +1,7 @@
 /**
  * @meanie/angular-api * https://github.com/meanie/angular-api
  *
- * Copyright (c) 2018 Adam Reis <adam@reis.nz>
+ * Copyright (c) 2019 Adam Reis <adam@reis.nz>
  * License: MIT
  */
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -590,6 +590,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      */
     $baseModel.prototype.clone = function (stripId) {
       var ModelClass = this.constructor;
+      //TODO: Should this be toJSON() ??
       var clone = new ModelClass(this.extract(), this.$parent);
       if (stripId) {
         delete clone.id;
@@ -601,8 +602,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * Check if two models are the same (based on ID)
      */
     $baseModel.prototype.isSame = function (model) {
+      if (!model) {
+        return false;
+      }
       if (!angular.isObject(model)) {
         return this.id === model;
+      }
+      if (!model.id) {
+        return false;
       }
       return this.id && model.id && this.id === model.id;
     };
