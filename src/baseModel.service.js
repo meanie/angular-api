@@ -227,8 +227,14 @@ angular.module('BaseModel.Service', [])
    * Check if two models are the same (based on ID)
    */
   $baseModel.prototype.isSame = function(model) {
+    if (!model) {
+      return false;
+    }
     if (!angular.isObject(model)) {
       return (this.id === model);
+    }
+    if (!model.id) {
+      return false;
     }
     return (this.id && model.id && this.id === model.id);
   };
