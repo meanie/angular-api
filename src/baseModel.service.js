@@ -111,6 +111,11 @@ angular.module('BaseModel.Service', [])
       Model = $injector.get(Model);
     }
 
+    //Already a model?
+    if (this[key] instanceof Model) {
+      return;
+    }
+
     //Get model class and initiate
     if (angular.isArray(this[key])) {
       this[key] = this[key].map(data => new Model(data, this));
