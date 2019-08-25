@@ -482,6 +482,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         Model = $injector.get(Model);
       }
 
+      //Already a model?
+      if (this[key] instanceof Model) {
+        return;
+      }
+
       //Get model class and initiate
       if (angular.isArray(this[key])) {
         this[key] = this[key].map(function (data) {
