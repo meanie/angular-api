@@ -218,12 +218,15 @@ angular.module('BaseModel.Service', [])
   /**
    * Clone
    */
-  $baseModel.prototype.clone = function(stripId) {
+  $baseModel.prototype.clone = function(stripId, data) {
     let ModelClass = this.constructor;
     //TODO: Should this be toJSON() ??
     let clone = new ModelClass(this.extract(), this.$parent);
     if (stripId) {
       delete clone.id;
+    }
+    if (data && typeof data === 'object') {
+      Object.assign(clone, data);
     }
     return clone;
   };
