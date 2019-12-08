@@ -593,12 +593,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     /**
      * Clone
      */
-    $baseModel.prototype.clone = function (stripId) {
+    $baseModel.prototype.clone = function (stripId, data) {
       var ModelClass = this.constructor;
       //TODO: Should this be toJSON() ??
       var clone = new ModelClass(this.extract(), this.$parent);
       if (stripId) {
         delete clone.id;
+      }
+      if (data && (typeof data === 'undefined' ? 'undefined' : _typeof(data)) === 'object') {
+        Object.assign(clone, data);
       }
       return clone;
     };
