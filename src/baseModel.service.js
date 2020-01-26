@@ -23,7 +23,7 @@ angular.module('BaseModel.Service', [])
    * Returns a moment if it is and null if it's not
    */
   function dateStringToMoment(value) {
-    let regex = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).*/;
+    const regex = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).*/;
     if (value.match(regex)) {
       let date = moment(value, moment.ISO_8601, true);
       if (date.isValid()) {
