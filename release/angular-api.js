@@ -526,25 +526,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     };
 
     /**
-     * Get a (deep) property by key
-     */
-    $baseModel.prototype.get = function (path) {
-
-      //Initialize object
-      var obj = this;
-
-      //Split path in object keys to traverse
-      var keys = path.split('.');
-      for (var i = 0; i < keys.length && obj !== undefined; i++) {
-        var key = keys[i];
-        obj = obj !== null ? obj[key] : undefined;
-      }
-
-      //Return reference
-      return obj;
-    };
-
-    /**
      * Extract a subset of data from the model
      */
     $baseModel.prototype.extract = function (properties) {
