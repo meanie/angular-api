@@ -4,7 +4,7 @@
  * Copyright (c) 2020 Adam Reis <adam@reis.nz>
  * License: MIT
  */
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 (function (window, angular, undefined) {
   'use strict';
@@ -361,7 +361,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }];
   });
 })(window, window.angular);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 (function (window, angular, undefined) {
   'use strict';
@@ -405,17 +405,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      */
     function copyProperty(obj, key) {
       if (angular.isArray(obj[key])) {
-        var _ret = function () {
-          var arr = obj[key];
-          //eslint-disable-next-line no-unused-vars
-          return {
-            v: arr.map(function (value, key) {
-              return copyProperty(arr, key);
-            })
-          };
-        }();
-
-        if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+        var arr = obj[key];
+        //eslint-disable-next-line no-unused-vars
+        return arr.map(function (value, key) {
+          return copyProperty(arr, key);
+        });
       }
       if (obj[key] && angular.isFunction(obj[key].clone)) {
         return obj[key].clone();
@@ -529,6 +523,25 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
       });
       return json;
+    };
+
+    /**
+     * Get a (deep) property by key
+     */
+    $baseModel.prototype.get = function (path) {
+
+      //Initialize object
+      var obj = this;
+
+      //Split path in object keys to traverse
+      var keys = path.split('.');
+      for (var i = 0; i < keys.length && obj !== undefined; i++) {
+        var key = keys[i];
+        obj = obj !== null ? obj[key] : undefined;
+      }
+
+      //Return reference
+      return obj;
     };
 
     /**
@@ -927,14 +940,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         //If defined and not null, encode it and replace in URL
         if (angular.isDefined(val) && val !== null) {
-          (function () {
-            var encodedVal = $url.encodeUriSegment(val);
-            regex = new RegExp(':' + urlParam + '(\\W|$)', 'g');
-            //eslint-disable-next-line no-unused-vars
-            url = url.replace(regex, function (match, tail) {
-              return encodedVal + tail;
-            });
-          })();
+          var encodedVal = $url.encodeUriSegment(val);
+          regex = new RegExp(':' + urlParam + '(\\W|$)', 'g');
+          //eslint-disable-next-line no-unused-vars
+          url = url.replace(regex, function (match, tail) {
+            return encodedVal + tail;
+          });
         }
 
         //Otherwise, remove from URL
