@@ -241,8 +241,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         id: '@id'
       },
       model: '',
-      config: {},
-      stripTrailingSlashes: true
+      config: {
+        stripTrailingSlashes: true
+      }
     };
 
     //Registered endpoints
@@ -313,7 +314,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * Strip trailing slashes behaviour
      */
     this.stripTrailingSlashes = function (strip) {
-      this.defaults.stripTrailingSlashes = !!strip;
+      this.setConfig('stripTrailingSlashes', !!strip);
       return this;
     };
 
