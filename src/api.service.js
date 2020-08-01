@@ -40,8 +40,9 @@ angular.module('Api.Service', [
       id: '@id',
     },
     model: '',
-    config: {},
-    stripTrailingSlashes: true,
+    config: {
+      stripTrailingSlashes: true,
+    },
   };
 
   //Registered endpoints
@@ -112,7 +113,7 @@ angular.module('Api.Service', [
    * Strip trailing slashes behaviour
    */
   this.stripTrailingSlashes = function(strip) {
-    this.defaults.stripTrailingSlashes = !!strip;
+    this.setConfig('stripTrailingSlashes', !!strip);
     return this;
   };
 
